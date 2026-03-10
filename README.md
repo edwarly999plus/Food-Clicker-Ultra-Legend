@@ -1,7 +1,7 @@
-# Food-Clicker-Ultra-Leyend
+# 🍴 Food Clicker Ultra Legend
 Un Simple Remake De Cookie Clicker
 
-## Efectos de Sonido y Música
+## ©️ Efectos de Sonido y Música
 Los efectos de sonido utilizados en este juego fueron obtenidos de **SoundJay**.
 **Licencia:** Royalty-free para uso en proyectos. Prohibida la redistribución de los archivos de sonido por separado o la venta de los mismos como producto independiente.
 Para más información, consulta los términos de SoundJay: www.soundjay.com
