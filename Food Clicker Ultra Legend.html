@@ -258,10 +258,6 @@
     <button id="theme-toggle" onclick="toggleTheme()">☀️</button>
     <h1 id="main-title">🍴 Food Clicker: Ultra Legend</h1>
 
-    <div style="text-align: center; margin-bottom: 10px;">
-        <button id="audio-init-btn" onclick="initAudio()">🔊 Activar Sonido (Android)</button>
-    </div>
-
     <div class="main-layout">
         <div class="column">
             <div class="panel-styled">
@@ -277,6 +273,7 @@
                     <option value="pt">🇧🇷 Português</option>
                     <option value="ar">🇸🇦 العربية</option>
                     <option value="ru">🇷🇺 Русский</option>
+                    <option value="ja">🇯🇵 日本語</option> /* Se Escribe Ja En Vez De Jp Para El Japonés (Aprendi De Mi Error) */
                 </select>
                 <div id="unsaved-warning" class="unsaved-blink" style="display: none;">¡Tienes datos sin guardar!</div>
                 <div id="autosave-status" style="color: green; font-weight: bold; display: none; margin-bottom: 5px;"></div>
@@ -344,7 +341,7 @@
                 <div id="auto-shop"></div>
             </div>
 
-            <!-- NUEVO WIDGET: Mejoras -->
+            <!-- Mejoras -->
             <div class="box" id="upgrades-box">
                 <h3 id="label-upgrades">🔧 Mejoras</h3>
                 <div id="click-upgrades-list" style="margin-bottom: 15px;"></div>
@@ -379,13 +376,14 @@
         </a>
     </div>
 <!-- Links De Recursos Y Archivos Descargables -->
-    <audio id="bg-audio" loop src="https://archive.org/download/foodclicker-archive/assets/mus/bg-music.mp3"></audio>
-    <audio id="click-sfx" src="https://archive.org/download/foodclicker-archive/assets/sfx/click.mp3"></audio>
-    <audio id="buy-sfx" src="https://archive.org/download/foodclicker-archive/assets/sfx/buy.mp3"></audio>
+    <audio id="bg-audio" loop preload="auto" src="https://archive.org/download/foodclicker-archive/assets/mus/bg-music.mp3"></audio>
+    <audio id="click-sfx" preload="auto" src="https://archive.org/download/foodclicker-archive/assets/sfx/click.mp3"></audio>
+    <audio id="buy-sfx" preload="auto"  src="https://archive.org/download/foodclicker-archive/assets/sfx/buy.mp3"></audio>
+    <audio id="arch-sfx" preload="auto" src="https://archive.org/download/foodclicker-archive/assets/sfx/arch.mp3"></audio>
     
 
     <script>
-        // Diccionarios de idiomas en-es
+        // Diccionarios de idiomas (Completos)
         const i18n = {
             es: { 
                 title: "🍴 Food Clicker: Ultra Legend", 
@@ -1021,7 +1019,76 @@
                 clickUpgrades: "🖱️ Улучшения клика",
                 buildingUpgrades: "🏭 Улучшения зданий",
                 buyAll: "Купить все"
-            }
+            },
+            
+            ja: { // Japonés Como En El Anime!
+                title: "🍴 フードクリック：ウルトラレジェンド",
+                data: "💾 データ管理",
+                trophies: "🏆 トロフィールーム",
+                clickPower: "🖱️ クリックパワー",
+                industry: "🏭 産業",
+                custom: "🎭 カスタマイズ",
+                sound: "🎵 サウンドと音楽",
+                b0: "おばあちゃん 👵",
+                b1: "オーブン 🔥",
+                b2: "工場 🏭",
+                b3: "鉱山 ⛏️",
+                b4: "ポータル 🌀",
+                b5: "伝説のポータル 🌟",
+                b6: "ウルトラ伝説のポータル 💫",
+                u0: "木の指 🪵",
+                u1: "鋼のポインター ⚔️",
+                u2: "鉄のポインター ⛓️",
+                u3: "ダイヤモンドクリック 💎",
+                u4: "伝説のポインター 🏆",
+                u5: "ウルトラ伝説のポインター 👑",
+                ach0: "🍪 クラム (100)",
+                ach1: "❓ 他に何か？ (1M)",
+                ach2: "🔥 ウルトラレジェンド (100M)",
+                quality: "🖼️ 品質:",
+                smooth: "スムーズ (HD)",
+                pixel: "ピクセル (レトロ)",
+                save: "保存",
+                load: "ロード",
+                music: "📤 音楽 (5k)",
+                stop: "⏹️ 停止",
+                sfx: "🔊 カスタムクリック",
+                upload: "📤 PNGをアップロード (1k)",
+                click: "クリック",
+                unsaved: "保存されていないデータがあります！",
+                use: "使用",
+                stats: "📊 統計",
+                totalCookies: "🍪 総クッキー",
+                sessionCookies: "📈 焼いたクッキー (このアセンション)",
+                totalEverCookies: "🏆 焼いたクッキー (全時間)",
+                startTime: "⏱️ ゲーム開始",
+                buildingsOwned: "🏭 所有する建物",
+                cps: "⚡ 秒あたりのクッキー",
+                cpsMultiplier: "📊 乗数",
+                rawCps: "🥚 生クッキー/秒",
+                highestCps: "📈 このアセンションでの最高",
+                cpc: "🖱️ クリックあたりのクッキー",
+                totalClicks: "👆 総クリック数",
+                manualCookies: "✋ 手作りクッキー",
+                totalPlayTime: "⏳ 総プレイ時間",
+                years: "年",
+                months: "月",
+                days: "日",
+                hours: "時間",
+                min: "分",
+                sec: "秒",
+                cookiesLabel: "クッキー",
+                autosave: "保存中... ゲームを閉じないでください",
+                saved: "保存されました！",
+                restart: "再起動",
+                export: "📤 エクスポート",
+                import: "📥 インポート",
+                restartConfirm: "ゲームを再起動してもよろしいですか？ 保存されていない進行状況はすべて失われます。",
+                upgrades: "🔧 アップグレード",
+                clickUpgrades: "🖱️ クリックアップグレード",
+                buildingUpgrades: "🏭 建物のアップグレード",
+                buyAll: "すべて購入" 
+            },
 
         };
 
@@ -1091,34 +1158,34 @@
 
         // Lista completa de nombres de skins (todos los emojis, en todos los idiomas) 
         const skinNames = {
-            "🍪": { es: "Galleta", en: "Cookie", fr: "Biscuit", de: "Keks", pt: "Biscoito", it: "Biscotto", zh: "饼干", ko: "쿠키", ar: "بسكويت", ru: "Печенье" },
-            "🍕": { es: "Pizza", en: "Pizza", fr: "Pizza", de: "Pizza", pt: "Pizza", it: "Pizza", zh: "披萨", ko: "피자", ar: "بيتزا", ru: "Пицца" },
-            "🍔": { es: "Hamburguesa", en: "Burger", fr: "Hamburger", de: "Burger", pt: "Hambúrguer", it: "Hamburger", zh: "汉堡", ko: "버거", ar: "برغر", ru: "Бургер" },
-            "🍟": { es: "Papas fritas", en: "Fries", fr: "Frites", de: "Pommes", pt: "Batata frita", it: "Patatine", zh: "薯条", ko: "감자튀김", ar: "بطاطا مقلية", ru: "Картошка фри" },
-            "🌭": { es: "Perrito caliente", en: "Hot dog", fr: "Hot-dog", de: "Hotdog", pt: "Cachorro-quente", it: "Hot dog", zh: "热狗", ko: "핫도그", ar: "هوت دوج", ru: "Хот-дог" },
-            "🍿": { es: "Palomitas", en: "Popcorn", fr: "Pop-corn", de: "Popcorn", pt: "Pipoca", it: "Popcorn", zh: "爆米花", ko: "팝콘", ar: "فشار", ru: "Попкорн" },
-            "🥓": { es: "Tocino", en: "Bacon", fr: "Bacon", de: "Speck", pt: "Bacon", it: "Pancetta", zh: "培根", ko: "베이컨", ar: "بيكون", ru: "Бекон" },
-            "🥐": { es: "Croissant", en: "Croissant", fr: "Croissant", de: "Croissant", pt: "Croissant", it: "Croissant", zh: "可颂", ko: "크루아상", ar: "كرواسان", ru: "Круассан" },
-            "🍞": { es: "Pan", en: "Bread", fr: "Pain", de: "Brot", pt: "Pão", it: "Pane", zh: "面包", ko: "빵", ar: "خبز", ru: "Хлеб" },
-            "🧀": { es: "Queso", en: "Cheese", fr: "Fromage", de: "Käse", pt: "Queijo", it: "Formaggio", zh: "奶酪", ko: "치즈", ar: "جبن", ru: "Сыр" },
-            "🍗": { es: "Pollo", en: "Chicken", fr: "Poulet", de: "Hähnchen", pt: "Frango", it: "Pollo", zh: "鸡肉", ko: "치킨", ar: "دجاج", ru: "Курица" },
-            "🍩": { es: "Dona", en: "Donut", fr: "Donut", de: "Donut", pt: "Donut", it: "Ciambella", zh: "甜甜圈", ko: "도넛", ar: "دونات", ru: "Пончик" },
-            "🍦": { es: "Helado", en: "Ice cream", fr: "Glace", de: "Eis", pt: "Sorvete", it: "Gelato", zh: "冰淇淋", ko: "아이스크림", ar: "آيس كريم", ru: "Мороженое" },
-            "🎂": { es: "Pastel", en: "Cake", fr: "Gâteau", de: "Kuchen", pt: "Bolo", it: "Torta", zh: "蛋糕", ko: "케이크", ar: "كعكة", ru: "Торт" },
-            "🍫": { es: "Chocolate", en: "Chocolate", fr: "Chocolat", de: "Schokolade", pt: "Chocolate", it: "Cioccolato", zh: "巧克力", ko: "초콜릿", ar: "شوكولاتة", ru: "Шоколад" },
-            "🍷": { es: "Vino", en: "Wine", fr: "Vin", de: "Wein", pt: "Vinho", it: "Vino", zh: "葡萄酒", ko: "와인", ar: "نبيذ", ru: "Вино" },
-            "☕": { es: "Café", en: "Coffee", fr: "Café", de: "Kaffee", pt: "Café", it: "Caffè", zh: "咖啡", ko: "커피", ar: "قهوة", ru: "Кофе" },
-            "🍺": { es: "Cerveza", en: "Beer", fr: "Bière", de: "Bier", pt: "Cerveja", it: "Birra", zh: "啤酒", ko: "맥주", ar: "بيرة", ru: "Пиво" },
-            "🍬": { es: "Caramelo", en: "Candy", fr: "Bonbon", de: "Süßigkeit", pt: "Doce", it: "Caramella", zh: "糖果", ko: "사탕", ar: "حلوى", ru: "Конфета" },
-            "🍭": { es: "Paleta", en: "Lollipop", fr: "Sucette", de: "Lutscher", pt: "Pirulito", it: "Lecca-lecca", zh: "棒棒糖", ko: "막대사탕", ar: "مصاصة", ru: "Леденец" },
-            "🍨": { es: "Helado", en: "Ice cream", fr: "Glace", de: "Eis", pt: "Sorvete", it: "Gelato", zh: "冰淇淋", ko: "아이스크림", ar: "آيس كريم", ru: "Мороженое" },
-            "🥧": { es: "Pastel", en: "Pie", fr: "Tarte", de: "Kuchen", pt: "Torta", it: "Torta", zh: "派", ko: "파이", ar: "فطيرة", ru: "Пирог" },
-            "🍝": { es: "Pasta", en: "Pasta", fr: "Pâtes", de: "Pasta", pt: "Massa", it: "Pasta", zh: "意大利面", ko: "파스타", ar: "معكرونة", ru: "Паста" },
-            "🧆": { es: "Falafel", en: "Falafel", fr: "Falafel", de: "Falafel", pt: "Falafel", it: "Falafel", zh: "法拉费", ko: "팔라펠", ar: "فلافل", ru: "Фалафель" },
-            "🥟": { es: "Empanadilla", en: "Dumpling", fr: "Ravioli", de: "Teigtasche", pt: "Bolinho", it: "Raviolo", zh: "饺子", ko: "만두", ar: "زلابية", ru: "Пельмень" },
-            "🥪": { es: "Sándwich", en: "Sandwich", fr: "Sandwich", de: "Sandwich", pt: "Sanduíche", it: "Sandwich", zh: "三明治", ko: "샌드위치", ar: "ساندويتش", ru: "Сэндвич" },
-            "🌮": { es: "Taco", en: "Taco", fr: "Taco", de: "Taco", pt: "Taco", it: "Taco", zh: "塔可", ko: "타코", ar: "تاكو", ru: "Тако" }
-        };
+                        "🍪": { es: "Galleta", en: "Cookie", fr: "Biscuit", de: "Keks", pt: "Biscoito", it: "Biscotto", zh: "饼干", ko: "쿠키", ar: "بسكويت", ru: "Печенье", ja: "クッキー" },
+            "🍕": { es: "Pizza", en: "Pizza", fr: "Pizza", de: "Pizza", pt: "Pizza", it: "Pizza", zh: "披萨", ko: "피자", ar: "بيتزا", ru: "Пицца", ja: "ピザ" },
+            "🍔": { es: "Hamburguesa", en: "Burger", fr: "Hamburger", de: "Burger", pt: "Hambúrguer", it: "Hamburger", zh: "汉堡", ko: "버거", ar: "برغر", ru: "Бургер", ja: "ハンバーガー" },
+            "🍟": { es: "Papas fritas", en: "Fries", fr: "Frites", de: "Pommes", pt: "Batata frita", it: "Patatine", zh: "薯条", ko: "감자튀김", ar: "بطاطا مقلية", ru: "Картошка фри", ja: "フライドポテト" },
+            "🌭": { es: "Perrito caliente", en: "Hot dog", fr: "Hot-dog", de: "Hotdog", pt: "Cachorro-quente", it: "Hot dog", zh: "热狗", ko: "핫도그", ar: "هوت دوج", ru: "Хот-дог", ja: "ホットドッグ" },
+            "🍿": { es: "Palomitas", en: "Popcorn", fr: "Pop-corn", de: "Popcorn", pt: "Pipoca", it: "Popcorn", zh: "爆米花", ko: "팝콘", ar: "فشار", ru: "Попкорн", ja: "ポップコーン" },
+            "🥓": { es: "Tocino", en: "Bacon", fr: "Bacon", de: "Speck", pt: "Bacon", it: "Pancetta", zh: "培根", ko: "베이컨", ar: "بيكون", ru: "Бекон", ja: "ベーコン" },
+            "🥐": { es: "Croissant", en: "Croissant", fr: "Croissant", de: "Croissant", pt: "Croissant", it: "Croissant", zh: "可颂", ko: "크루아상", ar: "كرواسان", ru: "Круассан", ja: "クロワッサン" },
+            "🍞": { es: "Pan", en: "Bread", fr: "Pain", de: "Brot", pt: "Pão", it: "Pane", zh: "面包", ko: "빵", ar: "خبز", ru: "Хлеб", ja: "パン" },
+            "🧀": { es: "Queso", en: "Cheese", fr: "Fromage", de: "Käse", pt: "Queijo", it: "Formaggio", zh: "奶酪", ko: "치즈", ar: "جبن", ru: "Сыр", ja: "チーズ" },
+            "🍗": { es: "Pollo", en: "Chicken", fr: "Poulet", de: "Hähnchen", pt: "Frango", it: "Pollo", zh: "鸡肉", ko: "치킨", ar: "دجاج", ru: "Курица", ja: "チキン" },
+            "🍩": { es: "Dona", en: "Donut", fr: "Donut", de: "Donut", pt: "Donut", it: "Ciambella", zh: "甜甜圈", ko: "도넛", ar: "دونات", ru: "Пончик", ja: "ドーナツ" },
+            "🍦": { es: "Helado", en: "Ice cream", fr: "Glace", de: "Eis", pt: "Sorvete", it: "Gelato", zh: "冰淇淋", ko: "아이스크림", ar: "آيس كريم", ru: "Мороженое", ja: "アイスクリーム" },
+            "🎂": { es: "Pastel", en: "Cake", fr: "Gâteau", de: "Kuchen", pt: "Bolo", it: "Torta", zh: "蛋糕", ko: "케이크", ar: "كعكة", ru: "Торт", ja: "ケーキ" },
+            "🍫": { es: "Chocolate", en: "Chocolate", fr: "Chocolat", de: "Schokolade", pt: "Chocolate", it: "Cioccolato", zh: "巧克力", ko: "초콜릿", ar: "شوكولاتة", ru: "Шоколад", ja: "チョコレート" },
+            "🍷": { es: "Vino", en: "Wine", fr: "Vin", de: "Wein", pt: "Vinho", it: "Vino", zh: "葡萄酒", ko: "와인", ar: "نبيذ", ru: "Вино", ja: "ワイン" },
+            "☕": { es: "Café", en: "Coffee", fr: "Café", de: "Kaffee", pt: "Café", it: "Caffè", zh: "咖啡", ko: "커피", ar: "قهوة", ru: "Кофе", ja: "コーヒー" },
+            "🍺": { es: "Cerveza", en: "Beer", fr: "Bière", de: "Bier", pt: "Cerveja", it: "Birra", zh: "啤酒", ko: "맥주", ar: "بيرة", ru: "Пиво", ja: "ビール" },
+            "🍬": { es: "Caramelo", en: "Candy", fr: "Bonbon", de: "Süßigkeit", pt: "Doce", it: "Caramella", zh: "糖果", ko: "사탕", ar: "حلوى", ru: "Конфета", ja: "キャンディー" },
+            "🍭": { es: "Paleta", en: "Lollipop", fr: "Sucette", de: "Lutscher", pt: "Pirulito", it: "Lecca-lecca", zh: "棒棒糖", ko: "막대사탕", ar: "مصاصة", ru: "Леденец", ja: "ロリポップ" },
+            "🍨": { es: "Helado", en: "Ice cream", fr: "Glace", de: "Eis", pt: "Sorvete", it: "Gelato", zh: "冰淇淋", ko: "아이스크림", ar: "آيس كريم", ru: "Мороженое", ja: "アイスクリーム" },
+            "🥧": { es: "Pastel", en: "Pie", fr: "Tarte", de: "Kuchen", pt: "Torta", it: "Torta", zh: "派", ko: "파이", ar: "فطيرة", ru: "Пирог", ja: "パイ" },
+            "🍝": { es: "Pasta", en: "Pasta", fr: "Pâtes", de: "Pasta", pt: "Massa", it: "Pasta", zh: "意大利面", ko: "파스타", ar: "معكرونة", ru: "Паста", ja: "パスタ" },
+            "🧆": { es: "Falafel", en: "Falafel", fr: "Falafel", de: "Falafel", pt: "Falafel", it: "Falafel", zh: "法拉费", ko: "팔라펠", ar: "فلافل", ru: "Фалафель", ja: "ファラフェル" },
+            "🥟": { es: "Empanadilla", en: "Dumpling", fr: "Ravioli", de: "Teigtasche", pt: "Bolinho", it: "Raviolo", zh: "饺子", ko: "만두", ar: "زلابية", ru: "Пельмень", ja: "餃子" },
+            "🥪": { es: "Sándwich", en: "Sandwich", fr: "Sandwich", de: "Sandwich", pt: "Sanduíche", it: "Sandwich", zh: "三明治", ko: "샌드위치", ar: "ساندويتش", ru: "Сэндвич", ja: "サンドイッチ" },
+            "🌮": { es: "Taco", en: "Taco", fr: "Taco", de: "Taco", pt: "Taco", it: "Taco", zh: "塔可", ko: "타코", ar: "تاكو", ru: "Тако", ja: "タコス" }
+         };
 // Precios De Skin
         let skinItems = [
             { emoji: "🍪", cost: 0 },
@@ -1219,7 +1286,7 @@
             });
             document.getElementById('click-sfx').play().catch(() => {});
             document.getElementById('buy-sfx').play().catch(() => {});
-            document.getElementById('ach-sfx').play().catch(() => {});
+            document.getElementById('arch-sfx').play().catch(() => {});
         }
 
         function playSound(audioId) {
@@ -1740,7 +1807,7 @@
                 newUnlock = true;
             }
             if (newUnlock) { // Reproducir Sonido De Logros, wtf a veces escribo todo en mayusculas y sin acento xdddd
-                playSound('ach-sfx');
+                playSound('arch-sfx');
                 unsavedChanges = true;
                 updateUnsavedWarning();
             }
@@ -1748,7 +1815,7 @@
             unlockedAch.forEach(id => aH += `<div class="ach-item">${getT('ach'+id)}</div>`);
             document.getElementById('ach-list').innerHTML = aH;
         }
-// Funcion De Cambiar Lenguaje
+// Funcion De Cambiar Lenguaje E Idioma
         function changeLanguage(l) {
             currentLang = l; // ID De Idioma Default Español = 1
             document.getElementById('main-title').innerText = getT('title');
@@ -1990,12 +2057,18 @@
         setInterval(autosave, 360000);
 // Si Es Android o iOS La IU Cambia
         if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-            document.getElementById('audio-init-btn').style.display = 'inline-block';
-        } else {
-            document.getElementById('audio-init-btn').style.display = 'none';
-            audioInitialized = true;
-        }
-
+    // En móviles, inicializar audio con el primer clic en cualquier parte
+    const firstInteraction = () => {
+        initAudio();
+        document.removeEventListener('click', firstInteraction);
+        document.removeEventListener('touchstart', firstInteraction);
+    };
+    document.addEventListener('click', firstInteraction, { once: true });
+    document.addEventListener('touchstart', firstInteraction, { once: true });
+} else {
+    // En escritorio, el audio ya puede reproducirse sin restricciones
+    audioInitialized = true;
+}
         changeLanguage('es'); // Iniciar En Español Por Defecto
         calculateCPC(); // inicializar cpc
     </script>
