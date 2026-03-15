@@ -12,18 +12,17 @@ si va a hacer un fork del proyecto por favor no use esta musica y use cualquier 
 
 ## 🇪🇸 🇺🇸 Lenguajes Soportados: 
 
-| Lenguaje | Bandera |
-|----------|------|
-| Español | `🇪🇸` (Defecto) |
-| English | `🇺🇸` |
-| Árabe | `🇸🇦` |
-| 中文 (Chino) | `🇨🇳` |
-| Português (Portugués) | `🇧🇷` |
-| 한국어 (Coreano) | `🇰🇷` |
-| Français (Francés) | `🇫🇷` |
-| Portuguese (Brazil) | `🇧🇷` |
-| arРусский (Ruso) | `🇷🇺` |
-| Deutsch (Alemán) | `🇩🇪` |
-| 日本語 (Japonés) | `🇯🇵` |
+| Lenguaje | Bandera | Código (ISO) |
+| :--- | :---: | :---: |
+| **Español (Defecto)** | 🇪🇸 | `es` |
+| **English** | 🇺🇸 | `en` |
+| **日本語 (Japonés)** | 🇯🇵 | `ja` |
+| **Português (Brasil)** | 🇧🇷 | `pt-BR` |
+| **中文 (Chino)** | 🇨🇳 | `zh` |
+| **Français (Francés)** | 🇫🇷 | `fr` |
+| **Deutsch (Alemán)** | 🇩🇪 | `de` |
+| **Русский (Ruso)** | 🇷🇺 | `ru` |
+| **한국어 (Coreano)** | 🇰🇷 | `ko` |
+| **العربية (Árabe)** | 🇸🇦 | `ar` |
 ## ❓ Instalación
 Para ejecutar el juego en Windows, descarga la última versión en función del sistema. Para ejecutar el juego en cualquier otra plataforma, abre el archivo .html con tu navegador de preferencia.
