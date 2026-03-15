@@ -1,18 +1,33 @@
-# 🍴 Food Clicker Ultra Legend  <img width="52" height="52" alt="foodcli" src="https://github.com/user-attachments/assets/fe58388f-dbf2-4edd-b35b-7e3fe57b8048" />
+# 🍴 Food Clicker Ultra Legend <img width="40" height="40" alt="foodcli" src="https://github.com/user-attachments/assets/fe58388f-dbf2-4edd-b35b-7e3fe57b8048" align="right" />
 
-**Un juego en el que debes hacer clic en diferentes alimentos. También puedes mejorar tus clics o comprar edificios para conseguir clics automáticos por segundo. No juegues más de una hora, ya que este RoqueLike es muy adictivo.**
+<p align="left">
+  <img src="https://img.shields.io/badge/made with-HTML5-orange?style=for-the-badge&logo=html5" alt="HTML5">
+</p>
 
-<img width="1340" height="682" alt="image" src="https://github.com/user-attachments/assets/17aa1f21-1ea5-4abe-a259-918af04e2b4f" />
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+![Version](https://img.shields.io/badge/version-1.1.0.0-green)
 
-## ©️ Efectos de Sonido y Música
-Los efectos de sonido utilizados en este juego fueron obtenidos de **SoundJay**.
-**Licencia:** Royalty-free para uso en proyectos. Prohibida la redistribución de los archivos de sonido por separado o la venta de los mismos como producto independiente.
-Para más información, consulta los términos de SoundJay: www.soundjay.com
+**Food Clicker Ultra Legend** es un adictivo juego de género incremental y Roguelike donde tu objetivo es recolectar la mayor cantidad de alimentos posible. Gestiona tus recursos, mejora tus habilidades y automatiza tu producción para llegar a cifras astronómicas.
 
-La música de fondo **You Can´t Do It** está compuesta por EdwarlyGamer999+
-si va a hacer un fork del proyecto por favor no use esta musica y use cualquier otra libre de derechos de autor.
+---
 
-## 🇪🇸 🇺🇸 Lenguajes Soportados: 
+## 🎮 Características Principales
+
+* **Mecánicas Incrementales:** Mejora la potencia de tus clics y desbloquea edificios para generar producción automática por segundo (CPS).
+* **Escalabilidad masiva:** Soporte de notación abreviada hasta **Vg (Vigintillón)**.
+* **Multilingüe:** Traducido a más de 10 idiomas para una experiencia global.
+* **Multiplataforma:** Ejecución nativa en Windows o mediante cualquier navegador moderno (HTML5).
+* **Assets externos:** Integración optimizada con recursos alojados en **Archive.org**.
+
+## 🖥️ Capturas de Pantalla
+
+<p align="center">
+  <img width="80%" alt="Preview del juego" src="https://github.com/user-attachments/assets/17aa1f21-1ea5-4abe-a259-918af04e2b4f" />
+</p>
+
+---
+
+## 🌐 Lenguajes Soportados (Localization)
 
 | Lenguaje | Bandera | Código (ISO) |
 | :--- | :---: | :---: |
@@ -26,5 +41,30 @@ si va a hacer un fork del proyecto por favor no use esta musica y use cualquier 
 | **Русский (Ruso)** | 🇷🇺 | `ru` |
 | **한국어 (Coreano)** | 🇰🇷 | `ko` |
 | **العربية (Árabe)** | 🇸🇦 | `ar` |
-## ❓ Instalación
-Para ejecutar el juego en Windows, descarga la última versión en función del sistema. Para ejecutar el juego en cualquier otra plataforma, abre el archivo .html con tu navegador de preferencia.
+
+---
+
+## ⚙️ Instalación y Uso
+
+### Windows
+1. Ve a la sección de **Releases** en este repositorio.
+2. Descarga el ejecutable correspondiente a tu arquitectura.
+3. Ejecuta y ¡empieza a hacer clic!
+
+### Otras Plataformas (Web/Linux/Mac)
+Simplemente abre el archivo `index.html` en tu navegador preferido (Chrome, Firefox, Edge, etc.).
+
+---
+
+## 📜 Créditos y Licencia
+
+### Sonido y Música
+* **Efectos de Sonido:** Obtenidos de [SoundJay](https://www.soundjay.com). (Royalty-free para uso en proyectos; prohibida su redistribución individual).
+* **Música de Fondo:** *"You Can´t Do It"* compuesta por **EdwarlyGamer999+**.
+    * *Nota para Forks:* Si decides realizar un fork de este proyecto, por favor **reemplaza esta música** por una libre de derechos.
+
+### Código
+Este proyecto está bajo la licencia **GPLv3**. Siéntete libre de explorar el código y contribuir.
+
+---
+<p align="center">Hecho con ❤️ por EdwarlyGamer999+</p>
