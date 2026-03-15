@@ -24,5 +24,6 @@ si va a hacer un fork del proyecto por favor no use esta musica y use cualquier 
 | Portuguese (Brazil) | `🇧🇷` |
 | arРусский (Ruso) | `🇷🇺` |
 | Deutsch (Alemán) | `🇩🇪` |
+| 日本語 (Japonés) | `🇯🇵` |
 ## ❓ Instalación
 Para ejecutar el juego en Windows, descarga la última versión en función del sistema. Para ejecutar el juego en cualquier otra plataforma, abre el archivo .html con tu navegador de preferencia.
