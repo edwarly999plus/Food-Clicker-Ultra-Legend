@@ -62,9 +62,7 @@ Simplemente abre el archivo `Food Clicker Ultra Legend.html` en tu navegador pre
 * **Efectos de Sonido:** Obtenidos de [SoundJay](https://www.soundjay.com). (Royalty-free para uso en proyectos; prohibida su redistribución individual).
 * **Música de Fondo:** *"You Can´t Do It"* compuesta por **EdwarlyGamer999+**.
     * *Nota para Forks:* Si decides realizar un fork de este proyecto, por favor **reemplaza esta música** por una libre de derechos.
-
-### Código
-Este proyecto está bajo la licencia **MIT**. Siéntete libre de explorar el código y contribuir.
+* Este proyecto está bajo la licencia **MIT**. Siéntete libre de explorar el código y contribuir.
 
 ---
 <p align="center">Hecho con ❤️ por EdwarlyGamer999+</p>
