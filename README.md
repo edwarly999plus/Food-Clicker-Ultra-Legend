@@ -64,7 +64,7 @@ Simplemente abre el archivo `index.html` en tu navegador preferido (Chrome, Fire
     * *Nota para Forks:* Si decides realizar un fork de este proyecto, por favor **reemplaza esta música** por una libre de derechos.
 
 ### Código
-Este proyecto está bajo la licencia **GPLv3**. Siéntete libre de explorar el código y contribuir.
+Este proyecto está bajo la licencia **MIT**. Siéntete libre de explorar el código y contribuir.
 
 ---
 <p align="center">Hecho con ❤️ por EdwarlyGamer999+</p>
