@@ -4,7 +4,7 @@
   <img src="https://img.shields.io/badge/made with-HTML5-orange?style=for-the-badge&logo=html5" alt="HTML5">
 </p>
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)]([https://www.gnu.org/licenses/gpl-3.0](https://opensource.org/license/mit))
 ![Version](https://img.shields.io/badge/version-1.1.0.0-green)
 
 **Food Clicker Ultra Legend** es un adictivo juego de género incremental y Roguelike donde tu objetivo es recolectar la mayor cantidad de alimentos posible. Gestiona tus recursos, mejora tus habilidades y automatiza tu producción para llegar a cifras astronómicas.
