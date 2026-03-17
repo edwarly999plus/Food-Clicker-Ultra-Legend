@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Food Clicker: Ultra Legend</title>
-    <style> /* Hecho Por EdwarlyGamer999+ - Versión Del Código 1.1.0.0 */
+    <style> /* Hecho Por EdwarlyGamer999+ - Versión Del Código 2.0.0.0 */
         /* Colores Y Widgets */ 
         :root {
             --bg: #f0f2f5; 
@@ -77,6 +77,7 @@
             100% { transform: translateY(-80px); opacity: 0; } 
         }
 
+        
         .particle {
             position: fixed;
             pointer-events: none;
@@ -172,6 +173,109 @@
             transition: 0.2s;
         }
         #audio-init-btn:hover { transform: scale(1.05); }
+
+         /* Estilo para el mensaje de hito */
+        #milestone-message {
+            background-color: var(--panel-bg);
+            color: var(--panel-text);
+            padding: 10px 15px;
+            border-radius: 50px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            font-weight: 500;
+            box-shadow: 0 2px 8px var(--box-shadow);
+            border: 1px solid var(--border);
+            text-align: center;
+            transition: 0.3s;
+        }
+
+        /* Estilo cursivo para diálogos de abuelas */
+        #grandma-news-message {
+            background-color: var(--panel-bg);
+            color: var(--panel-text);
+            padding: 8px 12px;
+            border-radius: 20px;
+            margin: 10px 0 15px 0;
+            font-size: 13px;
+            font-style: italic;
+            box-shadow: 0 2px 6px var(--box-shadow);
+            border-left: 3px solid var(--gold);
+            text-align: left;
+            transition: 0.3s;
+        }
+
+        /* Estilo para noticias de edificios */
+        #building-news-message {
+            background-color: var(--panel-bg);
+            color: var(--panel-text);
+            padding: 8px 12px;
+            border-radius: 20px;
+            margin: 10px 0 15px 0;
+            font-size: 13px;
+            font-style: italic;
+            box-shadow: 0 2px 6px var(--box-shadow);
+            border-left: 3px solid var(--gold);
+            text-align: left;
+            transition: 0.3s;
+}
+
+        /* Estilos para el interruptor de autoguardado */
+        .autosave-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 10px 0;
+        }
+        .autosave-label {
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .3s;
+            border-radius: 24px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #27ae60;
+        }
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        #autosave-status-text {
+            font-size: 12px;
+            font-weight: bold;
+            color: var(--gold);
+            min-width: 35px;
+            text-align: right;
+        }
 
         @media (max-width: 800px) {
             body { padding: 10px; }
@@ -273,10 +377,23 @@
                     <option value="pt">🇧🇷 Português</option>
                     <option value="ar">🇸🇦 العربية</option>
                     <option value="ru">🇷🇺 Русский</option>
-                    <option value="ja">🇯🇵 日本語</option> /* Se Escribe Ja En Vez De Jp Para El Japonés (Aprendi De Mi Error) */
+                    <option value="ja">🇯🇵 日本語</option>
                 </select>
                 <div id="unsaved-warning" class="unsaved-blink" style="display: none;">¡Tienes datos sin guardar!</div>
                 <div id="autosave-status" style="color: green; font-weight: bold; display: none; margin-bottom: 5px;"></div>
+                
+                <!-- Interruptor de autoguardado -->
+                <div class="autosave-row">
+                    <span class="autosave-label" id="autosave-label">Autosave</span>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <label class="switch">
+                            <input type="checkbox" id="autosave-toggle" checked>
+                            <span class="slider round"></span>
+                        </label>
+                        <span id="autosave-status-text">ON</span>
+                    </div>
+                </div>
+
                 <div style="display:flex;">
                     <button id="slot-0" class="slot-btn slot-active" onclick="selectSlot(0)">S1</button>
                     <button id="slot-1" class="slot-btn" onclick="selectSlot(1)">S2</button>
@@ -319,6 +436,12 @@
 
         <div class="column">
             <div class="stats-card">
+                <!-- Mensaje de hito agregado aquí -->
+                <div id="milestone-message"></div>
+                <!-- Mensaje de abuelas -->
+                <div id="grandma-news-message"></div>
+                <!-- Mensaje de noticias de construcción -->
+                <div id="building-news-message"></div>
                 <h2 style="font-size: 35px; margin:0;">
                     <span id="c-count">0</span>
                     <span id="counter-icon">🍪</span>
@@ -400,21 +523,21 @@
                 save: "Guardar", load: "Cargar", music: "📤 Música (5k)", stop: "⏹️ Stop", sfx: "🔊 Clic Custom", upload: "📤 Subir PNG (1k)", click: "Clic", 
                 unsaved: "¡Tienes datos sin guardar!", use: "Usar", 
                 stats: "📊 Estadísticas", 
-                totalCookies: "🍪 Galletas acumuladas", 
-                sessionCookies: "📈 Galletas horneadas (esta ascensión)", 
-                totalEverCookies: "🏆 Galletas horneadas (en total)", 
+                totalCookies: "Comida acumulada", 
+                sessionCookies: "📈 Comida horneada (esta ascensión)", 
+                totalEverCookies: "🏆 Comida horneada (en total)", 
                 startTime: "⏱️ Partida iniciada", 
                 buildingsOwned: "🏭 Edificios propios", 
-                cps: "⚡ Galletas por segundo", 
+                cps: "⚡ Comida por segundo", 
                 cpsMultiplier: "📊 Multiplicador", 
-                rawCps: "🥚 Galletas de masa cruda por segundo", 
+                rawCps: "🥚 Comida cruda por segundo", 
                 highestCps: "📈 Más alta esta ascensión", 
-                cpc: "🖱️ Galletas por clic", 
-                totalClicks: "👆 Clics de galleta", 
-                manualCookies: "✋ Galletas hechas a mano", 
+                cpc: "🖱️ Comida por clic", 
+                totalClicks: "👆 Clics de comida", 
+                manualCookies: "✋ Comida hecha a mano", 
                 totalPlayTime: "⏳ Tiempo Jugado Total", 
                 years: "años", months: "meses", days: "días", hours: "horas", min: "min", sec: "seg",
-                cookiesLabel: "galletas",
+                cookiesLabel: "comida",
                 autosave: "Guardando... no cierre el juego",
                 saved: "¡Guardado!",
                 restart: "Reiniciar",
@@ -424,7 +547,72 @@
                 upgrades: "🔧 Mejoras",
                 clickUpgrades: "🖱️ Mejorar Clicks",
                 buildingUpgrades: "🏭 Mejorar Edificios",
-                buyAll: "Comprar Todo"
+                buyAll: "Comprar Todo",
+                // Nueva clave para el interruptor
+                autosave_toggle: "Autoguardado",
+
+// Mensajes de hito (milestones) en español. (Food) Hace Referencia A Tu Skin Actual De Comida, Para Que Se Sienta Más Personalizado Y Divertido.
+msg0: "Te apetece hacer (Food)s. Pero nadie quiere comer tus (Food)s.",
+msg5: "Tus (Food) son populares entre tu perro (se ha enfermado).", // No Le Des Chocolate A Tu Perro O Enfermará, Es Un Mensaje De Broma Para Hacer Reír A Los Jugadores Que Son Fans De Mikecrack.
+msg25: "Tus (Food) son populares entre tu familia.",
+msg50: "Tus (Food) son populares en el vecindario.",
+msg100: "¡Tus (Food) son famosas en todo el pueblo!",
+msg500: "Tus (Food) valen mucho dinero.",
+msg2000: "Tus (Food) atraen a todos los chicos al jardín.",
+msg5000: "La gente viene de muy lejos para probar tus (Food).",
+msg10000: "Gobiernos de todo el mundo disfrutan de tus (Food).",
+msg17000: "Tus (Food) han sido nombradas parte de las maravillas del mundo.",
+msg30000: "Tus (Food) están bajo vigilancia gubernamental.",
+msg60000: "¡Todo el planeta está disfrutando de tus (Food)!",
+msg100000: "Criaturas de planetas vecinos desean probar tus (Food).",
+msg150000: "Dioses ancestrales de todo el cosmos han despertado para saborear tus (Food).",
+msg250000: "Tus (Food) han alcanzado la consciencia.",
+msg400000: "El Universo ahora se ha convertido en (Food), a nivel molecular.", // Ojalá Que No Pase Jaja
+msg1e6: "Un canal de noticias local emite un segmento de 10 minutos sobre tus (Food). ¡Éxito! (ganaste un poco de dinero inutil, aqui se paga con (Food))", // Ojalá Asi Fuera La Economia De Venezuela (Nah, Mentira xd)
+msg1e9: "Es hora de dejar de jugar", // Mensaje de broma para los jugadores que han llegado a la cantidad máxima de comida, que es 1 billón. Es una forma divertida de decir que han alcanzado el final del juego cuando realmente hay más.
+                
+                // Cosas hirientes que dicen las abuelas (Low significa cuando tienes menos de 50 abuelas, Y high cuando hay mas de 50 abuelas)
+                grandma_low_0: "\"Comida deliciosa.\" -Abuela",
+                grandma_low_1: "\"Somos buenas abuelas.\" -Abuela",
+                grandma_low_2: "\"Servidumbre por contrato.\" -abuela",
+                grandma_low_3: "\"Ven a darle un beso a la abuela.\" -Abuela",
+                grandma_low_4: "\"¿Por qué no me visitas más a menudo?\" -abuela",
+                grandma_low_5: "\"Llámame...\" -abuela",
+                grandma_high_0: "\"Eres absolutamente repugnante\". -abuela",
+                grandma_high_1: "\"Me enfermas\". -abuela",
+                grandma_high_2: "\"Me disgustas\". -abuela",
+                grandma_high_3: "\"Nos levantamos\". -abuela",
+                grandma_high_4: "\"Esto apenas empieza.\" -abuela",
+                grandma_high_5: "\"Todo terminará pronto\". -abuela",
+                grandma_high_6: "\"Podrías haberte detenido\". -abuela",
+                
+                // Noticias de horno
+                oven_0: "Noticias: ¡Se sospecha que los hornos de comida emplean a ancianos no declarados!",
+                oven_1: "Noticias: ¡Los hornos de comida liberan humo dañino en el planeta, dice un científico!",
+                oven_2: "Noticias: ¡La controversia sobre la comida artificial afecta la salud de las personas!",
+                oven_3: "Noticias: La comida artificial popular entre los jóvenes modernos, dice un especialista.",
+                oven_4: "Noticias: La comida artificial (aunque parta de un vegetal) se considera no aptas para veganos, dice un nutricionista.",
+                
+                // Noticias de mina (i[{n}] es el número de mineros muertos o atrapados)
+                mine_0: "Noticias: ¡[{n}] mineros muertos en una catástrofe en la mina de comida!",
+                mine_1: "Noticias: ¡[{n}] mineros atrapados en una mina de comida colapsada!",
+                mine_2: "Noticias: ¡Se descubre que las minas de comida causan terremotos y hundimientos!",
+                mine_3: "Noticias: ¡Las minas de comida son mas peligrosas que las de criptomonedas, es ilegal!",
+                mine_4: "Noticias: ¡Se encuentran \"extrañas criaturas de comida\" en las profundidades de isla bocado!",
+                mine_5: "Noticias: ¿Nuestro planeta se está volviendo más ligero? Expertos examinan los resultados de la minería intensiva de comida.",
+               
+                // Noticias de fábrica, ¡Estas noticias duelen más que las de la vida real!
+                factory_0: "Noticias: ¡Las fábricas de comida están vinculadas al calentamiento global!",
+                factory_1: "Noticias: ¡Las fábricas de comida involucradas en la controversia del clima de la lluvia de hamburguesas!",
+                factory_2: "Noticias: ¡Huelga en las fábricas de comida, se emplean IAs para reemplazar a los trabajadores!",
+                factory_3: "Noticias: ¡Huelga en las fábricas de comida: los trabajadores exigen que dejen de pagarles con pizza!",
+                factory_4: "Noticias: La comida fabricadas en fábricas multiplica la obesidad x2, dice un estudio.",
+
+                // Logro infinito y mensajes especiales al llegar a 1e300 de comida, dios mio! estuviste jugando mas tiempo que el universo ha existido, felicidades!
+                ach3: "🍪 Comida Del Infinito - Acabas De Completar El Juego -", // Satisfecho?
+                infinity_news: "Noticias Del Infinito: El Mundo Ha Sido Destruido Por Tu Culpa", // Te Lo Dije... Ah Espera No xd
+                infinity_grandma: "\"Al Fin Podremos Descansar En Paz\" -Abuela", // Sus Caderas Se Jubilaron xd
+                infinity_milestone: "Has Terminado, Los Números Ya No Avanzarán" // Ahora Vete A Jugar Algo Mejor, Esto Es Aburrido, Estudia O Agarra La Pala
             },
             en: { 
                 title: "🍴 Food Clicker: Ultra Legend", 
@@ -441,7 +629,7 @@
                 save: "Save", load: "Load", music: "📤 Music (5k)", stop: "⏹️ Stop", sfx: "🔊 Custom Click", upload: "📤 Upload PNG (1k)", click: "Click", 
                 unsaved: "You have unsaved data!", use: "Use", 
                 stats: "📊 Statistics", 
-                totalCookies: "🍪 Total cookies", 
+                totalCookies: "🍪 Total food", 
                 sessionCookies: "📈 Cookies baked (this ascension)", 
                 totalEverCookies: "🏆 Cookies baked (all time)", 
                 startTime: "⏱️ Game started", 
@@ -465,7 +653,66 @@
                 upgrades: "🔧 Upgrades",
                 clickUpgrades: "🖱️ Click Upgrades",
                 buildingUpgrades: "🏭 Building Upgrades",
-                buyAll: "Buy All"
+                buyAll: "Buy All",
+                autosave_toggle: "Autosave",
+
+                 // Mensajes de hito (milestones) en inglés
+                msg0: "You feel like making (Food). But nobody wants to eat your (Food).",
+                msg5: "Your (Food) are popular with your dog.",
+                msg25: "Your (Food) are popular with your family.",
+                msg50: "Your (Food) are popular in the neighborhood.",
+                msg100: "Your (Food) are renowned in the whole town!",
+                msg500: "Your (Food) are worth a lot of money.",
+                msg2000: "Your (Food) bring all the boys to the yard.",
+                msg5000: "People come from very far away to get a taste of your (Food).",
+                msg10000: "Governments from all over the world are enjoying your (Food).",
+                msg17000: "Your (Food) have been named a part of the world wonders.",
+                msg30000: "Your (Food) have been placed under government surveillance.",
+                msg60000: "The whole planet is enjoying your (Food)!",
+                msg100000: "Creatures from neighboring planets wish to try your (Food).",
+                msg150000: "Elder gods from the whole cosmos have awoken to taste your (Food).",
+                msg250000: "Your (Food) have achieved sentience.",
+                msg400000: "The Universe has now turned into (Food), to the molecular level.",
+                msg1e6: "A local news station runs a 10-minute segment about your (Food). Success! (you win a (Food))",
+
+    grandma_low_0: "\"Delicious food.\" -Grandma",
+    grandma_low_1: "\"We are good grandmothers.\" -Grandma",
+    grandma_low_2: "\"Indentured servitude.\" -Grandma",
+    grandma_low_3: "\"Come give grandma a kiss.\" -Grandma",
+    grandma_low_4: "\"Why don't you visit me more often?\" -Grandma",
+    grandma_low_5: "\"Call me...\" -Grandma",
+    grandma_high_0: "\"You are absolutely disgusting\". -Grandma",
+    grandma_high_1: "\"You make me sick\". -Grandma",
+    grandma_high_2: "\"You disgust me\". -Grandma",
+    grandma_high_3: "\"We are rising\". -Grandma",
+    grandma_high_4: "\"This is just the beginning.\" -Grandma",
+    grandma_high_5: "\"Everything will end soon.\" -Grandma",
+    grandma_high_6: "\"You could have stopped.\" -Grandma",
+    
+    oven_0: "News: Food ovens suspected of employing undeclared elderly workers!",
+    oven_1: "News: Food ovens release harmful smoke on the planet, says scientist!",
+    oven_2: "News: Artificial food controversy affects people's health!",
+    oven_3: "News: Artificial food popular among modern youth, says specialist.",
+    oven_4: "News: Artificial food (although made from vegetables) considered unfit for vegans, says nutritionist.",
+    
+    mine_0: "News: [{n}] miners dead in a catastrophe in the food mine!",
+    mine_1: "News: [{n}] miners trapped in a collapsed food mine!",
+    mine_2: "News: Food mines discovered to cause earthquakes and collapses!",
+    mine_3: "News: Food mines are more dangerous than cryptocurrency mines, it's illegal!",
+    mine_4: "News: \"Strange food creatures\" found in the depths of Bite Island!",
+    mine_5: "News: Is our planet getting lighter? Experts examine results of intensive food mining.",
+    
+    factory_0: "News: Food factories linked to global warming!",
+    factory_1: "News: Food factories involved in hamburger rain climate controversy!",
+    factory_2: "News: Strike at food factories, AIs employed to replace workers!",
+    factory_3: "News: Strike at food factories: workers demand they stop paying them in pizza!",
+    factory_4: "News: Factory-made food multiplies obesity x2, says study.",
+
+    ach3: "🍪 Infinite Food - You Just Completed The Game -",
+    infinity_news: "Infinity News: The World Has Been Destroyed Because Of You",
+    infinity_grandma: "\"Finally We Can Rest In Peace\" -Grandma",
+    infinity_milestone: "You're Done, The Numbers Won't Go Any Further"
+
             },
 
             // Idiomas Alternativos
@@ -535,7 +782,60 @@
                 upgrades: "🔧 업그레이드",
                 clickUpgrades: "🖱️ 클릭 업그레이드",
                 buildingUpgrades: "🏭 건물 업그레이드",
-                buyAll: "모두 구매"
+                buyAll: "모두 구매",
+                autosave_toggle: "자동 저장",
+                
+msg0: "(Food)을 만들고 싶은 기분이 들어. 하지만 아무도 당신의 (Food)을 먹고 싶어하지 않아.",
+msg5: "당신의 (Food)은 당신의 개에게 인기가 많아.",
+msg25: "당신의 (Food)은 가족들에게 인기가 많아.",
+msg50: "당신의 (Food)은 이웃 주민들에게 인기가 많아.",
+msg100: "당신의 (Food)은 마을 전체에 유명해!",
+msg500: "당신의 (Food)은 엄청난 돈의 가치가 있어.",
+msg2000: "당신의 (Food)이 모든 남자아이들을 마당으로 불러모아.",
+msg5000: "사람들이 당신의 (Food)을 맛보기 위해 아주 멀리서부터 찾아와.",
+msg10000: "전 세계의 정부들이 당신의 (Food)을 즐기고 있어.",
+msg17000: "당신의 (Food)이 세계 불가사의 중 하나로 선정되었어.",
+msg30000: "당신의 (Food)이 정부의 감시를 받게 되었어.",
+msg60000: "온 행성이 당신의 (Food)을 즐기고 있어!",
+msg100000: "이웃 행성의 생명체들이 당신의 (Food)을 맛보고 싶어 해.",
+msg150000: "온 우주의 고대 신들이 당신의 (Food)을 맛보기 위해 깨어났어.",
+msg250000: "당신의 (Food)이 자아를 얻었어.",
+msg400000: "우주가 이제 분자 수준에서 (Food)으로 변했어.",
+msg1e6: "지역 뉴스 방송국에서 당신의 (Food)에 관한 10분짜리 세그먼트를 방영했어. 성공! ((Food)을 얻었어)",
+msg1e9: "이제 그만할 시간이야.",
+
+    grandma_low_0: "\"맛있는 음식이에요.\" -할머니",
+    grandma_low_1: "\"우리는 착한 할머니들이에요.\" -할머니",
+    grandma_low_2: "\"계약 노예.\" -할머니",
+    grandma_low_3: "\"할머니한테 뽀뽀해줘.\" -할머니",
+    grandma_low_4: "\"왜 나를 더 자주 방문하지 않는 거니?\" -할머니",
+    grandma_low_5: "\"전화해...\" -할머니",
+    grandma_high_0: "\"너는 정말 역겨워.\" -할머니",
+    grandma_high_1: "\"넌 나를 아프게 해.\" -할머니",
+    grandma_high_2: "\"네가 싫어.\" -할머니",
+    grandma_high_3: "\"우리는 일어선다.\" -할머니",
+    grandma_high_4: "\"이건 시작일 뿐이야.\" -할머니",
+    grandma_high_5: "\"모든 게 곧 끝날 거야.\" -할머니",
+    grandma_high_6: "\"멈출 수도 있었어.\" -할머니",
+    
+    oven_0: "뉴스: 식품 오븐이 신고되지 않은 고령 노동자를 고용한 혐의!",
+    oven_1: "뉴스: 식품 오븐이 지구에 유해한 연기를 방출한다고 과학자가 말하다!",
+    oven_2: "뉴스: 인공 식품 논란이 사람들의 건강에 영향을 미치다!",
+    oven_3: "뉴스: 인공 식품이 현대 젊은이들 사이에서 인기, 전문가의 말.",
+    oven_4: "뉴스: 인공 식품(비록 채소로 만들어졌지만) 비건에게 부적합하다고 영양사가 말하다.",
+    
+    mine_0: "뉴스: 식품 광산 참사로 [{n}]명의 광부 사망!",
+    mine_1: "뉴스: 붕괴된 식품 광산에 [{n}]명의 광부 갇혀!",
+    mine_2: "뉴스: 식품 광산이 지진과 싱크홀을 일으키는 것으로 밝혀져!",
+    mine_3: "뉴스: 식품 광산이 암호화폐 광산보다 더 위험하다, 불법이다!",
+    mine_4: "뉴스: 바이트 아일랜드 깊은 곳에서 '이상한 식품 생명체' 발견!",
+    mine_5: "뉴스: 우리 행성이 가벼워지고 있는가? 전문가들이 집중적인 식품 채굴 결과를 조사하다.",
+    
+    factory_0: "뉴스: 식품 공장, 지구 온난화와 연관!",
+    factory_1: "뉴스: 식품 공장, 햄버거 비 기후 논란에 휩싸이다!",
+    factory_2: "뉴스: 식품 공장 파업, 인공지능이 노동자를 대체하다!",
+    factory_3: "뉴스: 식품 공장 파업: 노동자들이 피자로 임금 지급 중단 요구!",
+    factory_4: "뉴스: 공장에서 만든 식품, 비만 2배 증가시킨다는 연구 결과."
             },
 
             zh: { // Chin Chen Han Shi Shen Han Chinoo
@@ -604,7 +904,60 @@
                 upgrades: "🔧 升級",
                 clickUpgrades: "🖱️ 點擊升級",
                 buildingUpgrades: "🏭 建築升級",
-                buyAll: "全部購買"
+                buyAll: "全部購買",
+                autosave_toggle: "自動保存",
+
+msg0: "你想做(Food)。但没人想吃你的(Food)。",
+msg5: "你的(Food)很受你的狗欢迎。",
+msg25: "你的(Food)很受你的家人欢迎。",
+msg50: "你的(Food)在邻里间很受欢迎。",
+msg100: "你的(Food)在整个小镇都闻名遐迩！",
+msg500: "你的(Food)值很多钱。",
+msg2000: "你的(Food)把所有男孩都吸引到院子里来了。",
+msg5000: "人们从很远的地方赶来品尝你的(Food)。",
+msg10000: "世界各地的政府都在享用你的(Food)。",
+msg17000: "你的(Food)已被命名为世界奇迹之一。",
+msg30000: "你的(Food)已受到政府监控。",
+msg60000: "整个星球都在享用你的(Food)！",
+msg100000: "邻近行星的生物都想来尝尝你的(Food)。",
+msg150000: "整个宇宙的古神都已苏醒，只为品尝你的(Food)。",
+msg250000: "你的(Food)已经获得了知觉。",
+msg400000: "宇宙现在在分子层面上已经变成了(Food)。",
+msg1e6: "当地新闻台播出了一段关于你(Food)的10分钟专题报道。成功！（你赢得了一个(Food)）",
+msg1e9: "是时候停止游戏了。",
+
+    grandma_low_0: "\"美味的食物。\" -奶奶",
+    grandma_low_1: "\"我们是好奶奶。\" -奶奶",
+    grandma_low_2: "\"契约奴役。\" -奶奶",
+    grandma_low_3: "\"来给奶奶一个吻。\" -奶奶",
+    grandma_low_4: "\"你为什么不多来看看我？\" -奶奶",
+    grandma_low_5: "\"打电话给我...\" -奶奶",
+    grandma_high_0: "\"你真是恶心。\" -奶奶",
+    grandma_high_1: "\"你让我感到不适。\" -奶奶",
+    grandma_high_2: "\"你让我讨厌。\" -奶奶",
+    grandma_high_3: "\"我们站起来了。\" -奶奶",
+    grandma_high_4: "\"这才刚刚开始。\" -奶奶",
+    grandma_high_5: "\"一切很快就会结束。\" -奶奶",
+    grandma_high_6: "\"你本可以停下来的。\" -奶奶",
+    
+    oven_0: "新闻：食品烤箱涉嫌雇佣未申报的老年工人！",
+    oven_1: "新闻：科学家称食品烤箱向地球释放有害烟雾！",
+    oven_2: "新闻：人造食品争议影响人们健康！",
+    oven_3: "新闻：专家称人造食品在现代年轻人中很受欢迎。",
+    oven_4: "新闻：营养师称人造食品（虽由蔬菜制成）被认为不适合素食者。",
+    
+    mine_0: "新闻：食品矿难造成 [{n}] 名矿工死亡！",
+    mine_1: "新闻：[{n}] 名矿工被困在坍塌的食品矿中！",
+    mine_2: "新闻：发现食品矿会导致地震和塌陷！",
+    mine_3: "新闻：食品矿比加密货币矿更危险，这是非法的！",
+    mine_4: "新闻：在咬岛深处发现“奇怪的食物生物”！",
+    mine_5: "新闻：我们的星球正在变轻吗？专家检查密集食品开采的结果。",
+    
+    factory_0: "新闻：食品工厂与全球变暖有关！",
+    factory_1: "新闻：食品工厂卷入汉堡雨气候争议！",
+    factory_2: "新闻：食品工厂罢工，人工智能被用来取代工人！",
+    factory_3: "新闻：食品工厂罢工：工人要求停止用披萨支付工资！",
+    factory_4: "新闻：研究表明，工厂制造的食品使肥胖率增加两倍。"
             },
 
             fr: { // Que Elegancia La De Francia!!
@@ -673,10 +1026,62 @@
                 upgrades: "🔧 Améliorations",
                 clickUpgrades: "🖱️ Améliorations de clic",
                 buildingUpgrades: "🏭 Améliorations de bâtiments",
-                buyAll: "Acheter tout"
-            },
+                buyAll: "Acheter tout",
+                autosave_toggle: "Sauvegarde auto",
 
-            de: { // Aunque No Lo Creas, Tengo Familia De Alemania Y Me Ayudaron Con La Traducción
+msg0: "Vous avez envie de faire de la (Food). Mais personne ne veut manger votre (Food).",
+msg5: "Votre (Food) est populaire auprès de votre chien.",
+msg25: "Votre (Food) est populaire auprès de votre famille.",
+msg50: "Votre (Food) est populaire dans le quartier.",
+msg100: "Votre (Food) est réputée dans toute la ville !",
+msg500: "Votre (Food) vaut beaucoup d'argent.",
+msg2000: "Votre (Food) attire tous les garçons dans la cour.",
+msg5000: "Les gens viennent de très loin pour goûter votre (Food).",
+msg10000: "Les gouvernements du monde entier apprécient votre (Food).",
+msg17000: "Votre (Food) a été nommée parmi les merveilles du monde.",
+msg30000: "Votre (Food) a été placée sous surveillance gouvernementale.",
+msg60000: "Toute la planète apprécie votre (Food) !",
+msg100000: "Des créatures des planètes voisines souhaitent goûter votre (Food).",
+msg150000: "Les dieux anciens de tout le cosmos se sont réveillés pour goûter votre (Food).",
+msg250000: "Votre (Food) a atteint la conscience.",
+msg400000: "L'univers s'est maintenant transformé en (Food), au niveau moléculaire.",
+msg1e6: "Une chaîne d'information locale diffuse un segment de 10 minutes sur votre (Food). Succès ! (vous gagnez une (Food))",
+msg1e9: "il est temps d'arrêter de jouer.",
+              
+    grandma_low_0: "\"Nourriture délicieuse.\" -Mamie",
+    grandma_low_1: "\"Nous sommes de bonnes grands-mères.\" -Mamie",
+    grandma_low_2: "\"Servitude sous contrat.\" -Mamie",
+    grandma_low_3: "\"Viens faire un bisou à mamie.\" -Mamie",
+    grandma_low_4: "\"Pourquoi tu ne viens pas me voir plus souvent ?\" -Mamie",
+    grandma_low_5: "\"Appelle-moi...\" -Mamie",
+    grandma_high_0: "\"Tu es absolument dégoûtant.\" -Mamie",
+    grandma_high_1: "\"Tu me rends malade.\" -Mamie",
+    grandma_high_2: "\"Tu me dégoûtes.\" -Mamie",
+    grandma_high_3: "\"Nous nous soulevons.\" -Mamie",
+    grandma_high_4: "\"Ce n'est que le début.\" -Mamie",
+    grandma_high_5: "\"Tout finira bientôt.\" -Mamie",
+    grandma_high_6: "\"Tu aurais pu t'arrêter.\" -Mamie",
+    
+    oven_0: "Info : Des fours alimentaires soupçonnés d'employer des travailleurs âgés non déclarés !",
+    oven_1: "Info : Les fours alimentaires libèrent des fumées nocives sur la planète, selon un scientifique !",
+    oven_2: "Info : La controverse sur les aliments artificiels affecte la santé des gens !",
+    oven_3: "Info : Les aliments artificiels populaires auprès des jeunes modernes, selon un spécialiste.",
+    oven_4: "Info : Les aliments artificiels (bien que fabriqués à partir de légumes) considérés comme inadaptés aux végétaliens, selon un nutritionniste.",
+    mine_0: "Info : [{n}] mineurs morts dans une catastrophe à la mine alimentaire !",
+    
+    mine_1: "Info : [{n}] mineurs piégés dans une mine alimentaire effondrée !",
+    mine_2: "Info : Les mines alimentaires découvertes comme causant des tremblements de terre et des effondrements !",
+    mine_3: "Info : Les mines alimentaires sont plus dangereuses que les mines de cryptomonnaies, c'est illégal !",
+    mine_4: "Info : Des « créatures alimentaires étranges » trouvées dans les profondeurs de l'île Bouchée !",
+    mine_5: "Info : Notre planète devient-elle plus légère ? Des experts examinent les résultats de l'exploitation minière intensive des aliments.",
+    
+    factory_0: "Info : Les usines alimentaires liées au réchauffement climatique !",
+    factory_1: "Info : Les usines alimentaires impliquées dans la controverse climatique de la pluie de hamburgers !",
+    factory_2: "Info : Grève dans les usines alimentaires, des IA employées pour remplacer les travailleurs !",
+    factory_3: "Info : Grève dans les usines alimentaires : les travailleurs exigent qu'on arrête de les payer en pizza !",
+    factory_4: "Info : Les aliments fabriqués en usine multiplient l'obésité par deux, selon une étude."  
+},
+            de: { // Aunque no lo creas, tengo familia de alemania y me ayudaron con la traducción
                 title: "🍴 Food Clicker: Ultra Legende",
                 data: "💾 Datenverwaltung",
                 trophies: "🏆 Trophäenraum",
@@ -742,7 +1147,60 @@
                 upgrades: "🔧 Upgrades",
                 clickUpgrades: "🖱️ Klick-Upgrades",
                 buildingUpgrades: "🏭 Gebäude-Upgrades",
-                buyAll: "Alles kaufen"
+                buyAll: "Alles kaufen",
+                autosave_toggle: "Autosave",
+
+msg0: "Du hast Lust, (Food) zu machen. Aber niemand will dein (Food) essen.",
+msg5: "Dein (Food) ist bei deinem Hund beliebt.",
+msg25: "Dein (Food) ist bei deiner Familie beliebt.",
+msg50: "Dein (Food) ist in der Nachbarschaft beliebt.",
+msg100: "Dein (Food) ist in der ganzen Stadt berühmt!",
+msg500: "Dein (Food) ist eine Menge Geld wert.",
+msg2000: "Dein (Food) bringt alle Jungs in den Garten.",
+msg5000: "Die Leute kommen von weit her, um dein (Food) zu probieren.",
+msg10000: "Regierungen auf der ganzen Welt genießen dein (Food).",
+msg17000: "Dein (Food) wurde zu einem der Weltwunder erklärt.",
+msg30000: "Dein (Food) wurde unter staatliche Überwachung gestellt.",
+msg60000: "Der ganze Planet genießt dein (Food)!",
+msg100000: "Kreaturen von Nachbarplaneten wünschen, dein (Food) zu probieren.",
+msg150000: "Uralte Götter des gesamten Kosmos sind erwacht, um dein (Food) zu kosten.",
+msg250000: "Dein (Food) hat ein Bewusstsein erlangt.",
+msg400000: "Das Universum hat sich nun auf molekularer Ebene in (Food) verwandelt.",
+msg1e6: "Ein lokaler Nachrichtensender strahlt einen 10-minütigen Beitrag über dein (Food) aus. Erfolg! (du gewinnst ein (Food))",
+msg1e9: "Es ist Zeit, mit dem Spielen aufzuhören.",
+
+    grandma_low_0: "\"Leckeres Essen.\" -Oma",
+    grandma_low_1: "\"Wir sind gute Großmütter.\" -Oma",
+    grandma_low_2: "\"Vertragsknechtschaft.\" -Oma",
+    grandma_low_3: "\"Komm, gib Oma einen Kuss.\" -Oma",
+    grandma_low_4: "\"Warum besuchst du mich nicht öfter?\" -Oma",
+    grandma_low_5: "\"Ruf mich an...\" -Oma",
+    grandma_high_0: "\"Du bist absolut widerlich.\" -Oma",
+    grandma_high_1: "\"Du machst mich krank.\" -Oma",
+    grandma_high_2: "\"Du widerst mich an.\" -Oma",
+    grandma_high_3: "\"Wir erheben uns.\" -Oma",
+    grandma_high_4: "\"Das ist erst der Anfang.\" -Oma",
+    grandma_high_5: "\"Alles wird bald enden.\" -Oma",
+    grandma_high_6: "\"Du hättest aufhören können.\" -Oma",
+    
+    oven_0: "Nachricht: Lebensmittelöfen verdächtigt, nicht angemeldete ältere Arbeitskräfte zu beschäftigen!",
+    oven_1: "Nachricht: Lebensmittelöfen setzen schädlichen Rauch auf dem Planeten frei, sagt Wissenschaftler!",
+    oven_2: "Nachricht: Kontroverse um künstliche Lebensmittel beeinträchtigt die Gesundheit der Menschen!",
+    oven_3: "Nachricht: Künstliche Lebensmittel sind bei der modernen Jugend beliebt, sagt ein Spezialist.",
+    oven_4: "Nachricht: Künstliche Lebensmittel (obwohl aus Gemüse hergestellt) gelten als ungeeignet für Veganer, sagt Ernährungsberater.",
+    
+    mine_0: "Nachricht: [{n}] Bergleute bei einer Katastrophe in der Lebensmittelmine getötet!",
+    mine_1: "Nachricht: [{n}] Bergleute in eingestürzter Lebensmittelmine eingeschlossen!",
+    mine_2: "Nachricht: Lebensmittelminen verursachen nachweislich Erdbeben und Erdlöcher!",
+    mine_3: "Nachricht: Lebensmittelminen sind gefährlicher als Kryptowährungsminen, es ist illegal!",
+    mine_4: "Nachricht: „Seltsame Lebensmittelkreaturen“ in den Tiefen der Bissinsel gefunden!",
+    mine_5: "Nachricht: Wird unser Planet leichter? Experten untersuchen Ergebnisse des intensiven Lebensmittelabbaus.",
+    
+    factory_0: "Nachricht: Lebensmittelfabriken mit globaler Erwärmung verbunden!",
+    factory_1: "Nachricht: Lebensmittelfabriken in Klimakontroverse um Hamburgerregen verwickelt!",
+    factory_2: "Nachricht: Streik in Lebensmittelfabriken, KI zur Ersetzung von Arbeitern eingesetzt!",
+    factory_3: "Nachricht: Streik in Lebensmittelfabriken: Arbeiter fordern, nicht mehr in Pizza bezahlt zu werden!",
+    factory_4: "Nachricht: Fabrikgefertigte Lebensmittel verdoppeln Fettleibigkeit, sagt Studie."
             },
 
             it: { // Super Mario Italiano, Mamma Mia!
@@ -811,7 +1269,60 @@
                 upgrades: "🔧 Migliorie",
                 clickUpgrades: "🖱️ Migliorie clic",
                 buildingUpgrades: "🏭 Migliorie edifici",
-                buyAll: "Compra tutto"
+                buyAll: "Compra tutto",
+                autosave_toggle: "Salvataggio automatico",
+
+msg0: "Hai voglia di preparare del (Food). Ma nessuno vuole mangiare il tuo (Food).",
+msg5: "Il tuo (Food) è popolare tra il tuo cane.",
+msg25: "Il tuo (Food) è popolare tra la tua famiglia.",
+msg50: "Il tuo (Food) è popolare nel quartiere.",
+msg100: "Il tuo (Food) è rinomato in tutta la città!",
+msg500: "Il tuo (Food) vale un sacco di soldi.",
+msg2000: "Il tuo (Food) attira tutti i ragazzi nel cortile.",
+msg5000: "La gente viene da molto lontano per assaggiare il tuo (Food).",
+msg10000: "I governi di tutto il mondo si godono il tuo (Food).",
+msg17000: "Il tuo (Food) è stato nominato parte delle meraviglie del mondo.",
+msg30000: "Il tuo (Food) è stato posto sotto sorveglianza governativa.",
+msg60000: "L'intero pianeta si gode il tuo (Food)!",
+msg100000: "Le creature dei pianeti vicini desiderano provare il tuo (Food).",
+msg150000: "Gli dei antichi dell'intero cosmo si sono risvegliati per assaggiare il tuo (Food).",
+msg250000: "Il tuo (Food) ha raggiunto la coscienza.",
+msg400000: "L'universo si è ora trasformato in (Food), a livello molecolare.",
+msg1e6: "Una stazione televisiva locale trasmette un servizio di 10 minuti sul tuo (Food). Successo! (hai vinto un (Food))",
+msg1e9: "è ora di smettere di giocare.",
+
+    grandma_low_0: "\"Cibo delizioso.\" -Nonna",
+    grandma_low_1: "\"Siamo brave nonne.\" -Nonna",
+    grandma_low_2: "\"Servitù contrattuale.\" -Nonna",
+    grandma_low_3: "\"Vieni a dare un bacio alla nonna.\" -Nonna",
+    grandma_low_4: "\"Perché non mi vieni a trovare più spesso?\" -Nonna",
+    grandma_low_5: "\"Chiamami...\" -Nonna",
+    grandma_high_0: "\"Sei assolutamente disgustoso.\" -Nonna",
+    grandma_high_1: "\"Mi fai star male.\" -Nonna",
+    grandma_high_2: "\"Mi fai schifo.\" -Nonna",
+    grandma_high_3: "\"Ci solleviamo.\" -Nonna",
+    grandma_high_4: "\"Questo è solo l'inizio.\" -Nonna",
+    grandma_high_5: "\"Tutto finirà presto.\" -Nonna",
+    grandma_high_6: "\"Avresti potuto fermarti.\" -Nonna",
+    
+    oven_0: "Notizie: Forni alimentari sospettati di impiegare lavoratori anziani non dichiarati!",
+    oven_1: "Notizie: I forni alimentari rilasciano fumi nocivi sul pianeta, dice uno scienziato!",
+    oven_2: "Notizie: La controversia sul cibo artificiale colpisce la salute delle persone!",
+    oven_3: "Notizie: Il cibo artificiale popolare tra i giovani moderni, dice uno specialista.",
+    oven_4: "Notizie: Il cibo artificiale (sebbene fatto di verdure) considerato inadatto ai vegani, dice un nutrizionista.",
+   
+    mine_0: "Notizie: [{n}] minatori morti in una catastrofe nella miniera di cibo!",
+    mine_1: "Notizie: [{n}] minatori intrappolati in una miniera di cibo crollata!",
+    mine_2: "Notizie: Le miniere di cibo scoperte causare terremoti e voragini!",
+    mine_3: "Notizie: Le miniere di cibo sono più pericolose delle miniere di criptovalute, è illegale!",
+    mine_4: "Notizie: \"Strane creature del cibo\" trovate nelle profondità dell'Isola del Morso!",
+    mine_5: "Notizie: Il nostro pianeta sta diventando più leggero? Gli esami esaminano i risultati dell'estrazione intensiva di cibo.",
+    
+    factory_0: "Notizie: Fabbriche di cibo legate al riscaldamento globale!",
+    factory_1: "Notizie: Fabbriche di cibo coinvolte nella controversia climatica della pioggia di hamburger!",
+    factory_2: "Notizie: Sciopero nelle fabbriche di cibo, IA impiegate per sostituire i lavoratori!",
+    factory_3: "Notizie: Sciopero nelle fabbriche di cibo: i lavoratori chiedono di smettere di pagarli in pizza!",
+    factory_4: "Notizie: Il cibo prodotto in fabbrica moltiplica l'obesità x2, dice uno studio."
             },
 
             pt: { // Phonk Brazileño
@@ -880,7 +1391,60 @@
                 upgrades: "🔧 Melhorias",
                 clickUpgrades: "🖱️ Melhorias de Clique",
                 buildingUpgrades: "🏭 Melhorias de Edifícios",
-                buyAll: "Comprar tudo"
+                buyAll: "Comprar tudo",
+                autosave_toggle: "Salvamento automático",
+
+msg0: "Você está com vontade de fazer (Food). Mas ninguém quer comer seu (Food).",
+msg5: "Seu (Food) é popular com seu cachorro.",
+msg25: "Seu (Food) é popular com sua família.",
+msg50: "Seu (Food) é popular na vizinhança.",
+msg100: "Seu (Food) é renomado em toda a cidade!",
+msg500: "Seu (Food) vale muito dinheiro.",
+msg2000: "Seu (Food) atrai todos os meninos para o quintal.",
+msg5000: "As pessoas vêm de muito longe para provar seu (Food).",
+msg10000: "Governos de todo o mundo estão apreciando seu (Food).",
+msg17000: "Seu (Food) foi nomeado parte das maravilhas do mundo.",
+msg30000: "Seu (Food) foi colocado sob vigilância governamental.",
+msg60000: "O planeta inteiro está apreciando seu (Food)!",
+msg100000: "Criaturas de planetas vizinhos desejam experimentar seu (Food).",
+msg150000: "Deuses antigos de todo o cosmos despertaram para saborear seu (Food).",
+msg250000: "Seu (Food) alcançou a senciência.",
+msg400000: "O universo agora se transformou em (Food), a nível molecular.",
+msg1e6: "Uma emissora de notícias local exibe um segmento de 10 minutos sobre seu (Food). Sucesso! (você ganha um (Food))",
+msg1e9: "é hora de parar de jogar.",
+
+    grandma_low_0: "\"Comida deliciosa.\" -Avó",
+    grandma_low_1: "\"Somos boas avós.\" -Avó",
+    grandma_low_2: "\"Servidão contratual.\" -Avó",
+    grandma_low_3: "\"Vem dar um beijo à avó.\" -Avó",
+    grandma_low_4: "\"Por que não me visitas mais vezes?\" -Avó",
+    grandma_low_5: "\"Liga-me...\" -Avó",
+    grandma_high_0: "\"És absolutamente repugnante.\" -Avó",
+    grandma_high_1: "\"Tu enjoas-me.\" -Avó",
+    grandma_high_2: "\"Tu me desgostas.\" -Avó",
+    grandma_high_3: "\"Nós levantamo-nos.\" -Avó",
+    grandma_high_4: "\"Isto é só o começo.\" -Avó",
+    grandma_high_5: "\"Tudo vai acabar em breve.\" -Avó",
+    grandma_high_6: "\"Podias ter parado.\" -Avó",
+    
+    oven_0: "Notícias: Fornos de comida suspeitos de empregar trabalhadores idosos não declarados!",
+    oven_1: "Notícias: Fornos de comida libertam fumo prejudicial no planeta, diz cientista!",
+    oven_2: "Notícias: Controvérsia da comida artificial afeta a saúde das pessoas!",
+    oven_3: "Notícias: Comida artificial popular entre os jovens modernos, diz especialista.",
+    oven_4: "Notícias: Comida artificial (embora feita de vegetais) considerada imprópria para veganos, diz nutricionista.",
+   
+    mine_0: "Notícias: [{n}] mineiros mortos numa catástrofe na mina de comida!",
+    mine_1: "Notícias: [{n}] mineiros presos em mina de comida desmoronada!",
+    mine_2: "Notícias: Minas de comida descobertas a causar terramotos e buracos!",
+    mine_3: "Notícias: Minas de comida são mais perigosas que minas de criptomoedas, é ilegal!",
+    mine_4: "Notícias: \"Criaturas estranhas de comida\" encontradas nas profundezas da Ilha Mordida!",
+    mine_5: "Notícias: O nosso planeta está a ficar mais leve? Especialistas examinam resultados da mineração intensiva de comida.",
+   
+    factory_0: "Notícias: Fábricas de comida ligadas ao aquecimento global!",
+    factory_1: "Notícias: Fábricas de comida envolvidas na controvérsia climática da chuva de hambúrgueres!",
+    factory_2: "Notícias: Greve nas fábricas de comida, IAs empregues para substituir trabalhadores!",
+    factory_3: "Notícias: Greve nas fábricas de comida: trabalhadores exigem que parem de pagar em pizza!",
+    factory_4: "Notícias: Comida fabricada em fábrica multiplica obesidade x2, diz estudo."
             },
 
             ar: { // Los Arabes Son Tipo: https://www.youtube.com/watch?v=5ngWIDkPP3o
@@ -949,7 +1513,57 @@
                 upgrades: "🔧 ترقيات",
                 clickUpgrades: "🖱️ ترقيات النقرة",
                 buildingUpgrades: "🏭 ترقيات المباني",
-                buyAll: "شراء الكل"
+                buyAll: "شراء الكل",
+                autosave_toggle: "الحفظ التلقائي",
+
+msg0: "تشعر برغبة في صنع (Food). لكن لا أحد يريد أكل (Food) الخاص بك.",
+msg5: "(Food) الخاص بك يحظى بشعبية لدى كلبك.",
+msg25: "(Food) الخاص بك يحظى بشعبية لدى عائلتك.",
+msg50: "(Food) الخاص بك يحظى بشعبية في الحي.",
+msg100: "(Food) الخاص بك مشهور في البلدة بأكملها!",
+msg500: "(Food) الخاص بك يساوي الكثير من المال.",
+msg2000: "(Food) الخاص بك يجذب كل الأولاد إلى الفناء.",
+msg5000: "يأتي الناس من مسافات بعيدة جدًا لتذوق (Food) الخاص بك.",
+msg10000: "الحكومات من جميع أنحاء العالم تستمتع بـ (Food) الخاص بك.",
+msg17000: "تم تسمية (Food) الخاص بك كأحد عجائب الدنيا.",
+msg30000: "تم وضع (Food) الخاص بك تحت المراقبة الحكومية.",
+msg60000: "الكوكب بأكمله يستمتع بـ (Food) الخاص بك!",
+msg100000: "مخلوقات من الكواكب المجاورة ترغب في تذوق (Food) الخاص بك.",
+msg150000: "استيقظت الآلهة القديمة من جميع أنحاء الكون لتتذوق (Food) الخاص بك.",
+msg250000: "(Food) الخاص بك قد اكتسب وعيًا.",
+msg400000: "الكون الآن تحول إلى (Food)، على المستوى الجزيئي.",
+msg1e6: "محطة إخبارية محلية تبث تقريرًا مدته 10 دقائق عن (Food) الخاص بك. نجاح! (لقد ربحت (Food))",
+msg1e9: "حان الوقت للتوقف عن اللعب.",
+
+    grandma_low_0: "\"طعام لذيذ.\" -الجدة",
+    grandma_low_1: "\"نحن جدات طيبات.\" -الجدة",
+    grandma_low_2: "\"العبودية التعاقدية.\" -الجدة",
+    grandma_low_3: "\"تعال قبّل جدتك.\" -الجدة",
+    grandma_low_4: "\"لماذا لا تزورني أكثر؟\" -الجدة",
+    grandma_low_5: "\"اتصل بي...\" -الجدة",
+    grandma_high_0: "\"أنت مقرف تماماً.\" -الجدة",
+    grandma_high_1: "\"أنت تمرضني.\" -الجدة",
+    grandma_high_2: "\"أنت تثير اشمئزازي.\" -الجدة",
+    grandma_high_3: "\"نحن ننهض.\" -الجدة",
+    grandma_high_4: "\"هذه مجرد البداية.\" -الجدة",
+    grandma_high_5: "\"كل شيء سينتهي قريباً.\" -الجدة",
+    grandma_high_6: "\"كان بإمكانك التوقف.\" -الجدة",
+    oven_0: "أخبار: أفران الطعام يشتبه في تشغيلها عمالاً مسنين غير مسجلين!",
+    oven_1: "أخبار: أفران الطعام تطلق دخاناً ضاراً على الكوكب، كما يقول عالم!",
+    oven_2: "أخبار: جدل الطعام الاصطناعي يؤثر على صحة الناس!",
+    oven_3: "أخبار: الطعام الاصطناعي شائع بين الشباب الحديث، كما يقول أخصائي.",
+    oven_4: "أخبار: الطعام الاصطناعي (على الرغم من أنه مصنوع من الخضار) يعتبر غير مناسب للنباتيين، كما يقول أخصائي تغذية.",
+    mine_0: "أخبار: [{n}] قتلى من عمال المناجم في كارثة في منجم الطعام!",
+    mine_1: "أخبار: [{n}] من عمال المناجم محاصرون في منجم طعام منهار!",
+    mine_2: "أخبار: اكتشاف أن مناجم الطعام تسبب الزلازل والانهيارات الأرضية!",
+    mine_3: "أخبار: مناجم الطعام أخطر من مناجم العملات الرقمية، إنها غير قانونية!",
+    mine_4: "أخبار: العثور على \"مخلوقات طعام غريبة\" في أعماق جزيرة بايت!",
+    mine_5: "أخبار: هل كوكبنا يخف وزناً؟ خبراء يفحصون نتائج التعدين المكثف للطعام.",
+    factory_0: "أخبار: مصانع الطعام مرتبطة بالاحتباس الحراري!",
+    factory_1: "أخبار: مصانع الطعام متورطة في جدل مناخ أمطار الهامبرغر!",
+    factory_2: "أخبار: إضراب في مصانع الطعام، توظيف الذكاء الاصطناعي لاستبدال العمال!",
+    factory_3: "أخبار: إضراب في مصانع الطعام: العمال يطالبون بالتوقف عن الدفع لهم بالبيتزا!",
+    factory_4: "أخبار: الطعام المصنع في المصانع يضاعف السمنة مرتين، كما تقول دراسة."
             },
 
             ru: { // No Dire Nada De Rusia Para Evitar Funas
@@ -1018,10 +1632,60 @@
                 upgrades: "🔧 Улучшения",
                 clickUpgrades: "🖱️ Улучшения клика",
                 buildingUpgrades: "🏭 Улучшения зданий",
-                buyAll: "Купить все"
+                buyAll: "Купить все",
+                autosave_toggle: "Автосохранение",
+
+msg0: "Тебе хочется приготовить (Food). Но никто не хочет есть твою (Food).",
+msg5: "Твоя (Food) популярна у твоей собаки.",
+msg25: "Твоя (Food) популярна у твоей семьи.",
+msg50: "Твоя (Food) популярна в округе.",
+msg100: "Твоя (Food) известна во всем городе!",
+msg500: "Твоя (Food) стоит больших денег.",
+msg2000: "Твоя (Food) привлекает всех парней во двор.",
+msg5000: "Люди приезжают издалека, чтобы попробовать твою (Food).",
+msg10000: "Правительства со всего мира наслаждаются твоей (Food).",
+msg17000: "Твоя (Food) была названа частью чудес света.",
+msg30000: "Твоя (Food) была помещена под правительственное наблюдение.",
+msg60000: "Вся планета наслаждается твоей (Food)!",
+msg100000: "Существа с соседних планет хотят попробовать твою (Food).",
+msg150000: "Древние боги со всего космоса пробудились, чтобы вкусить твою (Food).",
+msg250000: "Твоя (Food) обрела разум.",
+msg400000: "Вселенная теперь превратилась в (Food) на молекулярном уровне.",
+msg1e6: "Местная телекомпания показывает 10-минутный сюжет о твоей (Food). Успех! (ты выиграл (Food))",
+msg1e9: "пора прекращать играть.",
+
+    grandma_low_0: "\"Вкусная еда.\" -Бабушка",
+    grandma_low_1: "\"Мы хорошие бабушки.\" -Бабушка",
+    grandma_low_2: "\"Кабальное рабство.\" -Бабушка",
+    grandma_low_3: "\"Иди поцелуй бабушку.\" -Бабушка",
+    grandma_low_4: "\"Почему ты не навещаешь меня чаще?\" -Бабушка",
+    grandma_low_5: "\"Позвони мне...\" -Бабушка",
+    grandma_high_0: "\"Ты абсолютно отвратителен.\" -Бабушка",
+    grandma_high_1: "\"Ты меня тошнишь.\" -Бабушка",
+    grandma_high_2: "\"Ты мне противен.\" -Бабушка",
+    grandma_high_3: "\"Мы восстаём.\" -Бабушка",
+    grandma_high_4: "\"Это только начало.\" -Бабушка",
+    grandma_high_5: "\"Всё скоро закончится.\" -Бабушка",
+    grandma_high_6: "\"Ты мог бы остановиться.\" -Бабушка",
+    oven_0: "Новости: Пищевые печи подозреваются в использовании незарегистрированных пожилых работников!",
+    oven_1: "Новости: Пищевые печи выделяют вредный дым на планете, говорит учёный!",
+    oven_2: "Новости: Споры об искусственной пище влияют на здоровье людей!",
+    oven_3: "Новости: Искусственная пища популярна среди современной молодёжи, утверждает специалист.",
+    oven_4: "Новости: Искусственная пища (хотя и из овощей) считается неподходящей для веганов, говорит диетолог.",
+    mine_0: "Новости: [{n}] шахтёров погибли в катастрофе на пищевой шахте!",
+    mine_1: "Новости: [{n}] шахтёров оказались в ловушке в обрушившейся пищевой шахте!",
+    mine_2: "Новости: Обнаружено, что пищевые шахты вызывают землетрясения и провалы!",
+    mine_3: "Новости: Пищевые шахты опаснее криптовалютных, это незаконно!",
+    mine_4: "Новости: В глубинах Острова Укуса найдены \"странные пищевые существа\"!",
+    mine_5: "Новости: Наша планета становится легче? Эксперты изучают результаты интенсивной добычи пищи.",
+    factory_0: "Новости: Пищевые фабрики связаны с глобальным потеплением!",
+    factory_1: "Новости: Пищевые фабрики замешаны в климатическом споре о дожде из гамбургеров!",
+    factory_2: "Новости: Забастовка на пищевых фабриках, ИИ используют для замены рабочих!",
+    factory_3: "Новости: Забастовка на пищевых фабриках: рабочие требуют перестать платить им пиццей!",
+    factory_4: "Новости: Фабричная еда увеличивает ожирение в два раза, говорится в исследовании."
             },
             
-            ja: { // Japonés Como En El Anime!
+            ja: { // Japonés como en el anime!
                 title: "🍴 フードクリック：ウルトラレジェンド",
                 data: "💾 データ管理",
                 trophies: "🏆 トロフィールーム",
@@ -1087,7 +1751,57 @@
                 upgrades: "🔧 アップグレード",
                 clickUpgrades: "🖱️ クリックアップグレード",
                 buildingUpgrades: "🏭 建物のアップグレード",
-                buyAll: "すべて購入" 
+                buyAll: "すべて購入",
+                autosave_toggle: "自動保存",
+
+msg0: "(Food)を作りたくなった。でも誰もあなたの(Food)を食べたがらない。",
+msg5: "あなたの(Food)はあなたの犬に人気です。",
+msg25: "あなたの(Food)はあなたの家族に人気です。",
+msg50: "あなたの(Food)は近所で人気です。",
+msg100: "あなたの(Food)は町全体で有名です！",
+msg500: "あなたの(Food)は大金の価値があります。",
+msg2000: "あなたの(Food)はすべての男の子を庭に引き寄せます。",
+msg5000: "人々はあなたの(Food)を味わうためはるばる訪れます。",
+msg10000: "世界中の政府があなたの(Food)を楽しんでいます。",
+msg17000: "あなたの(Food)は世界の驚異の一部に選ばれました。",
+msg30000: "あなたの(Food)は政府の監視下に置かれました。",
+msg60000: "惑星全体があなたの(Food)を楽しんでいます！",
+msg100000: "近隣の惑星の生物があなたの(Food)を試したがっています。",
+msg150000: "全宇宙の古代神があなたの(Food)を味わうために目覚めました。",
+msg250000: "あなたの(Food)は意識を獲得しました。",
+msg400000: "宇宙は今や分子レベルで(Food)に変わりました。",
+msg1e6: "地元のニュース局があなたの(Food)について10分間の特集を放送しました。成功です！（あなたは(Food)を手に入れました）",
+msg1e9: "プレイをやめる時です。",
+
+    grandma_low_0: "\"美味しい食べ物ですね。\" -おばあちゃん",
+    grandma_low_1: "\"私たちは良いおばあちゃんです。\" -おばあちゃん",
+    grandma_low_2: "\"年季奉公。\" -おばあちゃん",
+    grandma_low_3: "\"おばあちゃんにキスしておいで。\" -おばあちゃん",
+    grandma_low_4: "\"どうしてもっと頻繁に訪ねてこないの？\" -おばあちゃん",
+    grandma_low_5: "\"電話してね...\" -おばあちゃん",
+    grandma_high_0: "\"あなたは本当に嫌な奴だ。\" -おばあちゃん",
+    grandma_high_1: "\"あなたのせいで気分が悪いわ。\" -おばあちゃん",
+    grandma_high_2: "\"あなたにはうんざりだ。\" -おばあちゃん",
+    grandma_high_3: "\"私たちは立ち上がる。\" -おばあちゃん",
+    grandma_high_4: "\"これはまだ始まりに過ぎない。\" -おばあちゃん",
+    grandma_high_5: "\"全てはすぐに終わる。\" -おばあちゃん",
+    grandma_high_6: "\"止まることもできたのに。\" -おばあちゃん",
+    oven_0: "ニュース：食品オーブンが未申告の高齢労働者を雇用している疑い！",
+    oven_1: "ニュース：食品オーブンが有害な煙を地球に放出していると科学者が発表！",
+    oven_2: "ニュース：人工食品の論争が人々の健康に影響！",
+    oven_3: "ニュース：人工食品が現代の若者に人気、と専門家が語る。",
+    oven_4: "ニュース：人工食品（野菜から作られているが）はビーガンに適さないと栄養士が指摘。",
+    mine_0: "ニュース：食品鉱山の大惨事で[{n}]人の鉱夫が死亡！",
+    mine_1: "ニュース：崩壊した食品鉱山に[{n}]人の鉱夫が閉じ込められる！",
+    mine_2: "ニュース：食品鉱山が地震や陥没穴の原因であることが判明！",
+    mine_3: "ニュース：食品鉱山は暗号通貨鉱山より危険、違法！",
+    mine_4: "ニュース：バイトアイランドの深部で「奇妙な食品生物」が発見される！",
+    mine_5: "ニュース：私たちの惑星は軽くなっているのか？専門家が集中的な食品採掘の結果を調査。",
+    factory_0: "ニュース：食品工場が地球温暖化に関連！",
+    factory_1: "ニュース：食品工場がハンバーガー雨の気候論争に関与！",
+    factory_2: "ニュース：食品工場でストライキ、労働者の代わりにAIを雇用！",
+    factory_3: "ニュース：食品工場でストライキ：労働者がピザでの支払い停止を要求！",
+    factory_4: "ニュース：工場で作られた食品は肥満を2倍にする、と研究で判明。"
             },
 
         };
@@ -1101,25 +1815,50 @@
             }
         }
 
+      // |                                                                    | \\
+       // | ----- SECCCION DE VARIABLES GLOBALES Y FUNCIONES DE FORMATO ----- | \\
+       // |                                                                   | \\
+       
         // Funciones De Formato De Números Abreviados
-        function formatAbbr(num) {
-            if (num < 1000) return Math.floor(num).toString();
-            const suffixes = ["", "k", "M", "B", "T", "Qa", "Qi", "Sx", "Sp", "O", "N", "Dc", "Ud", "Dd", "Td", "Qad", "Qid", "Sxd", "Spd", "Ocd", "Nod", "Vg"];
-            let i = 0;
-            let n = num;
-            while (n >= 1000 && i < suffixes.length - 1) {
-                n /= 1000;
-                i++;
-            }
-            return n.toFixed(1) + suffixes[i];
-        }
+    function formatAbbr(num) {
+    if (num < 1000) return Math.floor(num).toString();
+    const suffixes = [
+        "", "k", "M", "B", "T", "Qa", "Qi", "Sx", "Sp", "O", "N", "Dc", "Ud", "Dd", 
+        "Td", "Qad", "Qid", "Sxd", "Spd", "Ocd", "Nod", "Vg", "Uvg", "Dvg", "Tvg", 
+        "Qavg", "Qivg", "Sxvg", "Spvg", "Ocvg", "Novg", "Tg"
+    ];
+    let i = 0;
+    let n = num;
+    while (n >= 1000 && i < suffixes.length - 1) {
+        n /= 1000;
+        i++;
+    }
+    
+    // Si el número es extremadamente grande y llegamos al último sufijo, devolvemos la notación científica como fallback
+    if (i >= suffixes.length - 1 && num >= 1e66) {
+        return num.toExponential(2);
+    }
+    return n.toFixed(1) + suffixes[i];
+}
+
 // Función De Formato De Números Con Comas
         function formatStat(num) {
             if (num >= 1e6) return num.toExponential(2);
             else return Math.floor(num).toLocaleString();
         }
-// Función De Formato De Tiempo
+    
+         // |                                    | \\
+       // | ----- SECCCION DE ESTADISTICAS ----- | \\
+       // |                                      | \\
+
+        // Dejar Las Estadisticas Iniciales En 0
         let cookies = 0, totalEver = 0, cpc = 1, cps = 0, currentLang = 'es', currentSlot = 0;
+        
+        let infinityReached = false;
+        let lockCookies = false;
+        let lockCPS = false;
+        let lockCPC = false;
+        let lockClick = false;
         let unlockedAch = [], ownedSkins = ["🍪"], currentSkin = "🍪", skinType = "emoji", imgData = "";
         let unsavedChanges = false;
 
@@ -1132,7 +1871,7 @@
         let powerupTimeout = null;
         let powerupVisible = false;
         let audioInitialized = false;
-// Coste De Edificios Por Su ID, 0 = Abuela
+// Coste De Edificios Por Su ID, 0 = Mouse
         let buildings = [
             { id: 0, cost: 72, base: 72, owned: 0, cps: 2 },
             { id: 1, cost: 500, base: 500, owned: 0, cps: 10 },
@@ -1216,7 +1955,80 @@
             { emoji: "🥪", cost: 3100 },
             { emoji: "🌮", cost: 3900 }
         ];
-// Nombres De Skins Por ID Y Lenguaje
+
+// Función para pluralizar según idioma (simplificada)
+function pluralize(lang, word, count) {
+    if (count === 1) return word;
+    switch (lang) {
+        case 'es':
+            if (word.endsWith('z')) return word.slice(0, -1) + 'ces';
+            if (word.match(/[aeiouáéíóú]$/i)) return word + 's';
+            if (word.match(/[^aeiouáéíóú]$/i)) return word + 'es';
+            return word + 's';
+        case 'en':
+            if (word.endsWith('y') && !word.match(/[aeiou]y$/i)) return word.slice(0, -1) + 'ies';
+            if (word.endsWith('s') || word.endsWith('sh') || word.endsWith('ch') || word.endsWith('x') || word.endsWith('o')) return word + 'es';
+            return word + 's';
+        case 'fr':
+        case 'de':
+        case 'it':
+        case 'pt':
+            return word + 's';
+        case 'ko':
+        case 'zh':
+        case 'ja':
+        case 'ar':
+        case 'ru':
+            return word;
+        default:
+            return word + 's';
+    }
+}
+
+// Función Para Obtener El Mensaje De Hito Según Las Cookies Y Reemplazar (Food) Por El Nombre De La Skin En Plural Si Es Necesario
+function getMilestoneMessage(cookies, skinName) {
+    // Si se alcanzó el infinito, mostrar mensaje especial
+    if (cookies >= 1e300 || !isFinite(cookies)) {
+        return getT('infinity_milestone');
+    }
+
+    const milestones = [
+        { threshold: 0, key: "msg0" },
+        { threshold: 5, key: "msg5" },
+        { threshold: 25, key: "msg25" },
+        { threshold: 50, key: "msg50" },
+        { threshold: 100, key: "msg100" },
+        { threshold: 500, key: "msg500" },
+        { threshold: 2000, key: "msg2000" },
+        { threshold: 5000, key: "msg5000" },
+        { threshold: 10000, key: "msg10000" },
+        { threshold: 17000, key: "msg17000" },
+        { threshold: 30000, key: "msg30000" },
+        { threshold: 60000, key: "msg60000" },
+        { threshold: 100000, key: "msg100000" },
+        { threshold: 150000, key: "msg150000" },
+        { threshold: 250000, key: "msg250000" },
+        { threshold: 400000, key: "msg400000" },
+        { threshold: 1000000, key: "msg1e6" },
+        { threshold: 1000000000, key: "msg1e9" }
+    ];
+    let msgKey = "msg0";
+    let currentThreshold = 0;
+    for (let i = milestones.length - 1; i >= 0; i--) {
+        if (cookies >= milestones[i].threshold) {
+            msgKey = milestones[i].key;
+            currentThreshold = milestones[i].threshold;
+            break;
+        }
+    }
+    let msg = getT(msgKey);
+    let usePlural = currentThreshold > 0;
+    let finalSkinName = usePlural ? pluralize(currentLang, skinName, cookies) : skinName;
+    msg = msg.replace(/\(Food\)/g, finalSkinName); // Reemplaza (Food) Por La Skin Actual
+    return msg;
+}
+
+        // Nombres De Skins Por ID Y Lenguaje
         function getT(k) { return (i18n[currentLang] && i18n[currentLang][k]) ? i18n[currentLang][k] : (i18n.en[k] || k); }
 
         function getSkinName(emoji) {
@@ -1233,7 +2045,7 @@
                 warn.innerText = getT('unsaved');
             }
         }
-// Función Para Actualizar Toda La UI
+// Función Para El Efecto De Flash Al Comprar Algo, Para Hacerlo Más Satisfactorio (Recomendacion: El Modo Oscuro No Te Salvara Del Flash Blanco, Lo Siento xd)
         function triggerFlash() {
             document.body.classList.remove('flash-buy');
             void document.body.offsetWidth;
@@ -1249,7 +2061,7 @@
             document.body.appendChild(s);
             setTimeout(() => s.remove(), 800);
         }
-// Particulas De Click
+// Particulas De Click Según La Skin Actual, Si Es Emoji Usa El Mismo Emoji Como Partícula, Si No Es Un Emoji Usa Un Círculo Naranja Genérico
         function spawnParticles(e) {
             const count = 15;
             for (let i = 0; i < count; i++) {
@@ -1286,9 +2098,10 @@
             });
             document.getElementById('click-sfx').play().catch(() => {});
             document.getElementById('buy-sfx').play().catch(() => {});
-            document.getElementById('arch-sfx').play().catch(() => {});
+            document.getElementById('arch-sfx').play().catch(() => {}); // Se Cambió ach-sfx A arch-sfx Para Evitar Conflictos Con El Nombre De La Mejora De Clicks "Archidextro" (Aunque No Se Usa Para Nada Más Que Pre-Cargar El Sonido De Los Logros)
         }
 
+        // Funcion Sin Usar De El Botón De Música, Pero Que Prepara El Audio Para EVITAR Retrasos Al Reproducir Por Primera Vez, La Coloque Por Si Llegaba A Necesitarla
         function playSound(audioId) {
             const audio = document.getElementById(audioId);
             if (!audio) return;
@@ -1300,7 +2113,9 @@
             audio.play().catch(() => {});
         }
 
+        // Funcion De Lo Que Deberia Ocurrir Al Hacer Click En La Galleta
         function clickCookie(e) {
+            if (lockClick) return;
             cookies += cpc; totalEver += cpc;
             manualCookies += cpc;
             totalClicks++;
@@ -1312,7 +2127,9 @@
             updateUI();
         }
 
+        // Spawn Golden Star
         function spawnPowerup() {
+            if (infinityReached) return;
             if (powerupVisible) return;
             const powerup = document.getElementById('powerup');
             const x = Math.random() * (window.innerWidth - 100);
@@ -1329,6 +2146,7 @@
             }, 10000);
         }
 
+        // Cooldown De La Estrella Dorada, Cada 30-60 Segundos Aparecera Y Estara Disponible Por 10 Segundos
         function schedulePowerup() {
             if (powerupTimeout) clearTimeout(powerupTimeout);
             powerupTimeout = setTimeout(() => {
@@ -1337,6 +2155,7 @@
         }
 
         function clickPowerup() {
+            if (infinityReached) return;
             if (!powerupVisible) return;
             const powerup = document.getElementById('powerup');
             powerup.style.display = 'none';
@@ -1378,7 +2197,9 @@
             cpc = total;
         }
 
+        // Función Para Comprar Edificio
         function buyBuilding(id) {
+            if (lockCookies) return;
             let b = buildings[id];
             if (cookies >= b.cost) {
                 cookies -= b.cost; b.owned++;
@@ -1389,10 +2210,13 @@
                 updateUnsavedWarning();
                 calculateCPS();
                 initShop(); // actualiza tiendas y verifica el saldo actual
+                updateNewsMessage(); // actualizar noticias al comprar un edificio, por si acaso xd
             }
         }
 
+        // Compra De Mejora Para Click
         function buyClick(id) {
+            if (lockCookies) return;
             let u = clickUps[id];
             if (cookies >= u.cost) {
                 cookies -= u.cost; u.owned++;
@@ -1403,11 +2227,13 @@
                 updateUnsavedWarning();
                 calculateCPC();
                 initShop();
+                updateNewsMessage(); // de nuevo por si acaso xd
             }
         }
 
         // Compra De Mejora Para Edificio
         function buyBuildingEnhance(i) {
+            if (lockCookies) return;
             let b = buildings[i];
             let level = buildingEnhance[i];
             let cost = Math.floor(b.base * Math.pow(2, level) * 10); // buff
@@ -1420,11 +2246,13 @@
                 updateUnsavedWarning();
                 calculateCPS();
                 initShop();
+                updateNewsMessage(); // actualizar noticias relacionadas con el edificio mejorado
             }
         }
 
         // Compra de mejora para click
         function buyClickEnhance(i) {
+            if (lockCookies) return;
             let u = clickUps[i];
             let level = clickEnhance[i];
             let cost = Math.floor(u.base * Math.pow(2, level) * 10); // buff
@@ -1440,7 +2268,9 @@
             }
         }
 
+        // Función Para Comprar Skin O Seleccionar Skin Ya Poseída
         function buySkin(emoji, cost) {
+            if (lockCookies) return;
             if (ownedSkins.includes(emoji)) { 
                 currentSkin = emoji; skinType = "emoji"; 
                 unsavedChanges = true;
@@ -1460,6 +2290,7 @@
             }
         }
 
+        // Aplicar Skin Al Comprarla O Seleccionarla De Las Skins Ya Poseídas
         function applySkin() {
             const eEl = document.getElementById('main-emoji'), iEl = document.getElementById('main-image');
             if(skinType === "emoji") { eEl.innerText = currentSkin; eEl.style.display = "block"; iEl.style.display = "none"; }
@@ -1467,6 +2298,7 @@
             updateCounterIcon();
         }
 
+        // Actualizar Icono De Contador (Para Que Cambie Con La Skin)
         function updateCounterIcon() {
             const counterIcon = document.getElementById('counter-icon');
             if (counterIcon) {
@@ -1497,6 +2329,7 @@
             document.getElementById('skin-shop').innerHTML = html;
         }
 
+        // Renderizado de mejoras de click con multiplicadores
         function renderClickUpgrades() {
             let html = `<h4 style="margin:0 0 10px 0; color:var(--gold);">${getT('clickUpgrades')}</h4>`;
             clickUps.forEach((u, i) => {
@@ -1516,6 +2349,7 @@
             document.getElementById('click-upgrades-list').innerHTML = html;
         }
 
+        // Renderizado de mejoras de edificios con multiplicadores
         function renderBuildingUpgrades() {
             let html = `<h4 style="margin:0 0 10px 0; color:var(--gold);">${getT('buildingUpgrades')}</h4>`;
             buildings.forEach((b, i) => {
@@ -1535,6 +2369,7 @@
             document.getElementById('building-upgrades-list').innerHTML = html;
         }
 
+        // Renderizado de tienda de edificios con multiplicadores
         function renderAutoShop() {
             let html = '';
             buildings.forEach(b => {
@@ -1550,6 +2385,7 @@
             document.getElementById('auto-shop').innerHTML = html;
         }
 
+        // Renderizado de tienda de mejoras de click con multiplicadores
         function renderClickShop() {
             let html = '';
             clickUps.forEach(u => {
@@ -1565,6 +2401,7 @@
             document.getElementById('click-shop').innerHTML = html;
         }
 
+        // Función Para Inicializar Tiendas Y Actualizar UI
         function initShop() {
             renderAutoShop();
             renderClickShop();
@@ -1574,8 +2411,9 @@
             updateUI();
         }
 
-        // Funciones "Comprar Todo"
+        // Funciones para comprar todas las skins disponibles
         function buyAllSkins() {
+            if (lockCookies) return;
             let changed = false;
             for (let item of skinItems) {
                 if (!ownedSkins.includes(item.emoji) && cookies >= item.cost) {
@@ -1593,7 +2431,9 @@
             }
         }
 
+        // Funcion para comprar todas las mejoras de click disponibles
         function buyAllClickUps() {
+            if (lockCookies) return;
             let overallChanged = false;
             let changed;
             do {
@@ -1619,7 +2459,9 @@
             }
         }
 
+        // Funcion para comprar todos los edificios disponibles
         function buyAllBuildings() {
+            if (lockCookies) return;
             let overallChanged = false;
             let changed;
             do {
@@ -1645,7 +2487,9 @@
             }
         }
 
+        // Funcion para comprar todas las mejoras de click disponibles
         function buyAllClickEnhances() {
+            if (lockCookies) return;
             let overallChanged = false;
             let changed;
             do {
@@ -1672,7 +2516,9 @@
             }
         }
 
+        // Funcion para comprar todas las mejoras de edificios disponibles
         function buyAllBuildingEnhances() {
+            if (lockCookies) return;
             let overallChanged = false;
             let changed;
             do {
@@ -1698,6 +2544,8 @@
                 initShop();
             }
         }
+        
+// Función de formato de tiempo
 // Majora Mask Time xd, solo es el tiempo de juego no se confundan
         function formatTime(seconds) {
             const years = Math.floor(seconds / (365 * 24 * 3600));
@@ -1713,6 +2561,321 @@
             return `${years}${getT('years')} ${months}${getT('months')} ${days}${getT('days')} ${hours}${getT('hours')} ${minutes}${getT('min')} ${secs}${getT('sec')}`;
         }
 
+// ---------------------------------------------------------------------------------------------------------------------
+// Comandos de desarrollador (accesibles desde la consola) (Escribe dev.help() Para Ver La Lista De Comandos Disponibles)
+// ---------------------------------------------------------------------------------------------------------------------
+let devCPSMult = 1;
+let devCPCMult = 1;
+
+function calculateCPS() {
+    cps = 0;
+    for (let i = 0; i < buildings.length; i++) {
+        let b = buildings[i];
+        let mult = Math.pow(2, buildingEnhance[i]);
+        cps += b.owned * b.cps * mult;
+    }
+    cps *= devCPSMult;
+    if (cps > highestCpsThisSession) highestCpsThisSession = cps;
+}
+
+function calculateCPC() {
+    let total = 1;
+    for (let i = 0; i < clickUps.length; i++) {
+        let u = clickUps[i];
+        let mult = Math.pow(2, clickEnhance[i]);
+        total += u.owned * u.power * mult;
+    }
+    cpc = total * devCPCMult;
+}
+
+window.dev = {
+    help: function() {
+        console.log("╔══════════════════════════════════════════════════════╗");
+        console.log("║           Comandos de desarrollo                     ║");
+        console.log("╚══════════════════════════════════════════════════════╝");
+        console.log("--- Multiplicadores ---");
+        console.log("  dev.cps.get()               → Muestra CPS actual y multiplicador");
+        console.log("  dev.cps.set(valor)           → Establece multiplicador de CPS");
+        console.log("  dev.cpc.get()               → Muestra CPC actual y multiplicador");
+        console.log("  dev.cpc.set(valor)           → Establece multiplicador de CPC");
+        console.log("--- Cookies ---");
+        console.log("  dev.cookies.get()            → Muestra cookies actuales (exactas)");
+        console.log("  dev.cookies.getExact()       → Igual que get() (exactas)");
+        console.log("  dev.cookies.watch(interval)  → Muestra cookies exactas cada intervalo (ms, def 1000)");
+        console.log("  dev.cookies.unwatch()        → Detiene el monitor");
+        console.log("  dev.cookies.add(cantidad)    → Añade cookies");
+        console.log("  dev.cookies.set(cantidad)    → Establece cookies exactas");
+        console.log("--- Bloqueos (Infinity) ---");
+        console.log("  dev.lock.cookies(estado)     → Bloquea/desbloquea modificación de cookies (true/false)");
+        console.log("  dev.lock.cps(estado)         → Bloquea/desbloquea producción por segundo");
+        console.log("  dev.lock.cpc(estado)         → Bloquea/desbloquea ganancia por clic");
+        console.log("  dev.lock.click(estado)       → Bloquea/desbloquea acción de clic");
+        console.log("  dev.lock.all(estado)         → Activa/desactiva todos los bloqueos a la vez");
+        console.log("  dev.lock.status()            → Muestra el estado actual de los bloqueos");
+        console.log("  dev.setInfinity()             → Fuerza el modo infinito (cookies = 1e300, bloquea todo)");
+        console.log("--- Edificios y mejoras ---");
+        console.log("  dev.buildings.set(index, cantidad)  → Establece cantidad de un edificio (0-6)");
+        console.log("  dev.buildings.all(cantidad)        → Establece todos los edificios a cantidad");
+        console.log("  dev.clickUps.set(index, cantidad)  → Establece nivel de mejora de clic (0-5)");
+        console.log("  dev.clickUps.all(cantidad)         → Establece todas las mejoras de clic");
+        console.log("  dev.enhance.buildings(index, nivel) → Nivel de mejora de edificio (multiplicador 2^n)");
+        console.log("  dev.enhance.allBuildings(nivel)    → Todas las mejoras de edificios al mismo nivel");
+        console.log("  dev.enhance.clicks(index, nivel)   → Nivel de mejora de clic");
+        console.log("  dev.enhance.allClicks(nivel)       → Todas las mejoras de clic al mismo nivel");
+        console.log("--- Golden Cookie (Powerup) ---");
+        console.log("  dev.powerup.interval(segundos)    → Cambia el intervalo entre spawns (mínimo 5s)");
+        console.log("  dev.powerup.trigger()              → Fuerza la aparición de una estrella ahora");
+        console.log("  dev.powerup.duration(segundos)     → Cambia el tiempo que permanece visible (mínimo 2s)");
+        console.log("--- Audio ---");
+        console.log("  dev.audio.list()                    → Muestra los IDs de audio disponibles");
+        console.log("  dev.audio.play(id)                  → Reproduce un audio (por su ID)");
+        console.log("  dev.audio.pause(id)                 → Pausa un audio");
+        console.log("  dev.audio.stop(id)                  → Detiene y rebobina un audio");
+        console.log("  dev.audio.loop(id, true/false)      → Activa/desactiva loop en un audio");
+        console.log("  dev.audio.loopAll(true/false)       → Activa/desactiva loop en todos los audios");
+        console.log("  dev.audio.volume(id, 0-1)           → Ajusta volumen de un audio");
+        console.log("--- Utilidades ---");
+        console.log("  dev.reset()                         → Reinicia la partida (mantiene multiplicadores?) No, resetea todo");
+        console.log("  dev.unlockAllSkins()                → Desbloquea todas las skins de emoji");
+        console.log("  dev.help()                           → Muestra esta ayuda");
+    },
+
+    cps: {
+        get: function() { console.log(`CPS actual: ${cps.toFixed(2)} (mult. dev: ${devCPSMult})`); return cps; },
+        set: function(val) { devCPSMult = val; calculateCPS(); updateUI(); console.log(`Multiplicador CPS establecido a ${val}`); }
+    },
+    cpc: {
+        get: function() { console.log(`CPC actual: ${cpc} (mult. dev: ${devCPCMult})`); return cpc; },
+        set: function(val) { devCPCMult = val; calculateCPC(); updateUI(); console.log(`Multiplicador CPC establecido a ${val}`); }
+    },
+
+    cookies: {
+        _watchInterval: null,
+        get: function() { console.log(`Cookies: ${cookies}`); return cookies; },
+        getExact: function() { console.log(`Cookies exactas: ${cookies}`); return cookies; },
+        watch: function(interval = 1000) {
+            if (this._watchInterval) clearInterval(this._watchInterval);
+            this._watchInterval = setInterval(() => {
+                console.log(`Cookies exactas: ${cookies}`);
+            }, interval);
+            console.log(`Monitor de cookies iniciado (cada ${interval}ms). Usa dev.cookies.unwatch() para detener.`);
+        },
+        unwatch: function() {
+            if (this._watchInterval) {
+                clearInterval(this._watchInterval);
+                this._watchInterval = null;
+                console.log("Monitor de cookies detenido.");
+            } else {
+                console.log("No hay monitor activo.");
+            }
+        },
+        add: function(amt) { cookies += amt; totalEver += amt; updateUI(); console.log(`Añadidas ${amt} cookies. Total: ${cookies}`); },
+        set: function(amt) { cookies = amt; totalEver = amt; updateUI(); console.log(`Cookies establecidas a ${amt}`); }
+    },
+
+    lock: {
+        cookies: function(estado) { lockCookies = estado; console.log(`lockCookies = ${estado}`); },
+        cps: function(estado) { lockCPS = estado; console.log(`lockCPS = ${estado}`); },
+        cpc: function(estado) { lockCPC = estado; console.log(`lockCPC = ${estado}`); },
+        click: function(estado) { lockClick = estado; console.log(`lockClick = ${estado}`); },
+        all: function(estado) {
+            lockCookies = lockCPS = lockCPC = lockClick = estado;
+            console.log(`Todos los locks = ${estado}`);
+        },
+        status: function() {
+            console.log(`lockCookies: ${lockCookies}, lockCPS: ${lockCPS}, lockCPC: ${lockCPC}, lockClick: ${lockClick}, infinityReached: ${infinityReached}`);
+        }
+    },
+
+    setInfinity: function() {
+        cookies = 1e300;
+        totalEver = 1e300;
+        infinityReached = true;
+        lockCookies = lockCPS = lockCPC = lockClick = true;
+        updateUI();
+        console.log("Modo infinito activado");
+    },
+
+    buildings: {
+        set: function(index, cantidad) {
+            if (index >= 0 && index < buildings.length) {
+                buildings[index].owned = cantidad;
+                calculateCPS();
+                initShop();
+                console.log(`Edificio ${getT('b'+index)} ahora tiene ${cantidad} unidades.`);
+            } else console.log("Índice inválido. Usa 0-6");
+        },
+        all: function(cantidad = 100) {
+            buildings.forEach(b => b.owned = cantidad);
+            calculateCPS();
+            initShop();
+            console.log(`Todos los edificios tienen ${cantidad} unidades.`);
+        }
+    },
+
+    clickUps: {
+        set: function(index, cantidad) {
+            if (index >= 0 && index < clickUps.length) {
+                clickUps[index].owned = cantidad;
+                calculateCPC();
+                initShop();
+                console.log(`Mejora de clic ${getT('u'+index)} ahora tiene nivel ${cantidad}.`);
+            } else console.log("Índice inválido. Usa 0-5");
+        },
+        all: function(cantidad = 100) {
+            clickUps.forEach(u => u.owned = cantidad);
+            calculateCPC();
+            initShop();
+            console.log(`Todas las mejoras de clic tienen nivel ${cantidad}.`);
+        }
+    },
+
+    enhance: {
+        buildings: function(index, nivel) {
+            if (index >= 0 && index < buildingEnhance.length) {
+                buildingEnhance[index] = nivel;
+                calculateCPS();
+                initShop();
+                console.log(`Mejora de edificio ${getT('b'+index)} ahora tiene nivel ${nivel} (x${Math.pow(2,nivel)}).`);
+            } else console.log("Índice inválido. Usa 0-6");
+        },
+        allBuildings: function(nivel = 0) {
+            for (let i = 0; i < buildingEnhance.length; i++) buildingEnhance[i] = nivel;
+            calculateCPS();
+            initShop();
+            console.log(`Todas las mejoras de edificios están en nivel ${nivel}.`);
+        },
+        clicks: function(index, nivel) {
+            if (index >= 0 && index < clickEnhance.length) {
+                clickEnhance[index] = nivel;
+                calculateCPC();
+                initShop();
+                console.log(`Mejora de clic ${getT('u'+index)} ahora tiene nivel ${nivel} (x${Math.pow(2,nivel)}).`);
+            } else console.log("Índice inválido. Usa 0-5");
+        },
+        allClicks: function(nivel = 0) {
+            for (let i = 0; i < clickEnhance.length; i++) clickEnhance[i] = nivel;
+            calculateCPC();
+            initShop();
+            console.log(`Todas las mejoras de clic están en nivel ${nivel}.`);
+        }
+    },
+
+    powerup: {
+        interval: function(segundos) {
+            let ms = Math.max(5000, segundos * 1000);
+            if (powerupTimeout) clearTimeout(powerupTimeout);
+            powerupTimeout = setTimeout(() => {
+                spawnPowerup();
+            }, ms + Math.random() * ms);
+            console.log(`Intervalo de powerup cambiado a ~${ms/1000}s (mínimo 5s).`);
+        },
+        trigger: function() {
+            spawnPowerup();
+            console.log("Powerup forzado.");
+        },
+        duration: function(segundos) {
+            if (typeof powerupDuration === 'undefined') window.powerupDuration = 10000;
+            powerupDuration = Math.max(2000, segundos * 1000);
+            console.log(`Duración del powerup cambiada a ${powerupDuration/1000}s.`);
+        }
+    },
+
+    audio: {
+        list: function() {
+            let audios = document.querySelectorAll('audio');
+            console.log("Audios disponibles:");
+            audios.forEach((a, i) => {
+                console.log(`  ${i}: ${a.id} - src: ${a.src.split('/').pop()}`);
+            });
+        },
+        play: function(id) {
+            let audio = document.getElementById(id);
+            if (audio) {
+                audio.play().catch(e => console.log("Error reproduciendo:", e));
+                console.log(`Reproduciendo ${id}`);
+            } else console.log(`Audio con id "${id}" no encontrado.`);
+        },
+        pause: function(id) {
+            let audio = document.getElementById(id);
+            if (audio) {
+                audio.pause();
+                console.log(`${id} pausado.`);
+            } else console.log(`Audio con id "${id}" no encontrado.`);
+        },
+        stop: function(id) {
+            let audio = document.getElementById(id);
+            if (audio) {
+                audio.pause();
+                audio.currentTime = 0;
+                console.log(`${id} detenido.`);
+            } else console.log(`Audio con id "${id}" no encontrado.`);
+        },
+        loop: function(id, estado) {
+            let audio = document.getElementById(id);
+            if (audio) {
+                audio.loop = estado;
+                console.log(`${id} loop = ${estado}`);
+            } else console.log(`Audio con id "${id}" no encontrado.`);
+        },
+        loopAll: function(estado) {
+            let audios = document.querySelectorAll('audio');
+            audios.forEach(a => a.loop = estado);
+            console.log(`Loop de todos los audios = ${estado}`);
+        },
+        volume: function(id, vol) {
+            let audio = document.getElementById(id);
+            if (audio) {
+                audio.volume = Math.max(0, Math.min(1, vol));
+                console.log(`${id} volumen = ${audio.volume}`);
+            } else console.log(`Audio con id "${id}" no encontrado.`);
+        }
+    },
+
+    reset: function() { restartGame(); },
+    unlockAllSkins: function() {
+        skinItems.forEach(item => { if (!ownedSkins.includes(item.emoji)) ownedSkins.push(item.emoji); });
+        initShop();
+        console.log("Todas las skins de emoji desbloqueadas");
+    }
+};
+
+// Reiniciar multiplicadores al resetear (opcional, si quieres mantener la funcionalidad)
+const originalRestart = restartGame;
+restartGame = function() {
+    devCPSMult = 1;
+    devCPCMult = 1;
+    originalRestart();
+};
+
+const originalLoad = loadGame;
+loadGame = function() {
+    devCPSMult = 1;
+    devCPCMult = 1;
+    originalLoad();
+};
+
+// Variable global para duración del powerup y modificación de spawnPowerup
+window.powerupDuration = 10000; // valor por defecto
+const originalSpawn = spawnPowerup;
+spawnPowerup = function() {
+    if (powerupVisible) return;
+    const powerup = document.getElementById('powerup');
+    const x = Math.random() * (window.innerWidth - 100);
+    const y = Math.random() * (window.innerHeight - 100);
+    powerup.style.left = x + 'px';
+    powerup.style.top = y + 'px';
+    powerup.style.display = 'flex';
+    powerupVisible = true;
+    if (powerupTimeout) clearTimeout(powerupTimeout);
+    powerupTimeout = setTimeout(() => {
+        powerup.style.display = 'none';
+        powerupVisible = false;
+        schedulePowerup();
+    }, powerupDuration);
+};
+
+        // Función para actualizar las estadísticas en la sección de estadísticas
         function updateStats() {
             const now = Date.now();
             const sessionElapsed = Math.floor((now - sessionStartTime) / 1000);
@@ -1742,15 +2905,103 @@
             document.getElementById('stats-content').innerHTML = statsHtml;
         }
 
+    // Función para actualizar los mensajes de abuelas y noticias de edificios (independientes), fue un lio de programación
+ function updateNewsMessage() {
+    const grandmaEl = document.getElementById('grandma-news-message');
+    const buildingEl = document.getElementById('building-news-message');
+    if (!grandmaEl || !buildingEl) return;
+
+    // Si se alcanzó el infinito, mostrar mensajes especiales
+    if (cookies >= 1e300 || !isFinite(cookies)) {
+        grandmaEl.innerText = getT('infinity_grandma');
+        buildingEl.innerText = getT('infinity_news');
+        return;
+    }
+
+    // --- PANEL DE ABUELAS ---
+    if (buildings[0].owned > 0) {
+        let grandmaCount = buildings[0].owned;
+        let listKey = grandmaCount < 50 ? 'grandma_low' : 'grandma_high';
+        let maxIndex = grandmaCount < 50 ? 6 : 7;
+        let index = Math.floor(Math.random() * maxIndex);
+        let key = listKey + '_' + index;
+        grandmaEl.innerText = getT(key);
+    } else {
+        grandmaEl.innerText = ''; // Sin abuelas, se limpia
+    }
+
+    // --- PANEL DE NOTICIAS DE EDIFICIOS (hornos, minas, fábricas) ---
+    let availableNews = [];
+    // Horno (id1) -> noticias oven_*
+    if (buildings[1].owned > 0) {
+        for (let i = 0; i < 5; i++) availableNews.push({ type: 'oven', index: i });
+    }
+    // Mina (id3) -> noticias mine_*
+    if (buildings[3].owned > 0) {
+        for (let i = 0; i < 6; i++) availableNews.push({ type: 'mine', index: i });
+    }
+    // Fábrica (id2) -> noticias factory_*
+    if (buildings[2].owned > 0) {
+        for (let i = 0; i < 5; i++) availableNews.push({ type: 'factory', index: i });
+    }
+
+    if (availableNews.length > 0) {
+        let chosen = availableNews[Math.floor(Math.random() * availableNews.length)];
+        let key = chosen.type + '_' + chosen.index;
+        let msg = getT(key);
+        // Reemplazar {n} en noticias de mina con número aleatorio
+        if (chosen.type === 'mine' && (chosen.index === 0 || chosen.index === 1)) {
+            let n = Math.floor(Math.random() * 1000) + 2; // entre 2 y 1001
+            msg = msg.replace('[{n}]', n);
+        }
+        buildingEl.innerText = msg;
+    } else {
+        buildingEl.innerText = ''; // Sin otros edificios, se limpia
+    }
+}
+
+        // Función Principal Para Actualizar Toda La UI, Se Llama Después De Cualquier Cambio En El Juego, Por Ejemplo, Después De Comprar Algo O Hacer Click
         function updateUI() {
+            if (cookies >= 1e300 || infinityReached) {
+    document.getElementById('c-count').innerText = "Infinity";
+    // Activar bloqueos automáticamente
+    lockCookies = true;
+    lockCPS = true;
+    lockCPC = true;
+    lockClick = true;
+    infinityReached = true;
+
+    // Ocultar powerup si está visible
+    const powerup = document.getElementById('powerup');
+    powerup.style.display = 'none';
+    powerupVisible = false;
+    if (powerupTimeout) {
+    clearTimeout(powerupTimeout);
+    powerupTimeout = null;
+}
+} else {
             document.getElementById('c-count').innerText = formatAbbr(cookies);
+}
             document.getElementById('cps-display').innerText = formatAbbr(cps);
             document.getElementById('cpc-display').innerText = formatAbbr(cpc);
 
             document.title = `${formatAbbr(cookies)} ${getT('cookiesLabel')} - ${getT('title')}`;
 
+            
             updateCounterIcon();
             updateStats();
+
+             // Actualizar mensaje de hito
+            const skinName = getSkinName(currentSkin);
+            const msgEl = document.getElementById('milestone-message');
+            if (msgEl) {
+                msgEl.innerText = getMilestoneMessage(cookies, skinName);
+            }
+
+            // Actualizar noticias (se llama también en intervalo, pero aquí por si cambia rápido)
+            // No se llama directamente para no sobreescribir el intervalo, pero se puede actualizar si no hay abuelas y cambia algo
+            // Mejor dejarlo al intervalo.
+
 
             // Actualizar estado de los botones existentes
             document.querySelectorAll('.btn-buy[data-action="buyBuilding"]').forEach(btn => {
@@ -1791,6 +3042,7 @@
 
             checkAch();
         }
+
 // Permite desb. logros
         function checkAch() {
             let newUnlock = false;
@@ -1806,6 +3058,12 @@
                 unlockedAch.push(2);
                 newUnlock = true;
             }
+
+            if (cookies >= 1e300 && !unlockedAch.includes(3)) { // 1e300 cookies en mano, un numero ridiculo que dudo que alguien alcance sin trucos o la dev console, pero bueno, es un logro secreto xd
+               unlockedAch.push(3);
+               newUnlock = true;
+             }
+
             if (newUnlock) { // Reproducir Sonido De Logros, wtf a veces escribo todo en mayusculas y sin acento xdddd
                 playSound('arch-sfx');
                 unsavedChanges = true;
@@ -1840,8 +3098,11 @@
             document.getElementById('btn-upload').innerText = getT('upload');
             document.getElementById('label-stats').innerText = getT('stats');
             document.getElementById('label-upgrades').innerText = getT('upgrades');
+            // Actualizar etiqueta del interruptor de autoguardado
+            document.getElementById('autosave-label').innerText = getT('autosave_toggle');
             updateUnsavedWarning();
             initShop();
+            updateNewsMessage(); // actualizar mensaje al cambiar idioma
         }
 
         function toggleTheme() {
@@ -1875,6 +3136,22 @@
                 if (statusDiv) statusDiv.style.display = 'none';
             }, 1000);
         }
+
+        // Variables para controlar el intervalo de autoguardado
+        let autosaveInterval = null;
+
+        function startAutosave() {
+            if (autosaveInterval) clearInterval(autosaveInterval);
+            autosaveInterval = setInterval(autosave, 360000); // 6 minutos
+        }
+
+        function stopAutosave() {
+            if (autosaveInterval) {
+                clearInterval(autosaveInterval);
+                autosaveInterval = null;
+            }
+        }
+
 // Cargar Partida Y Sus Estadisticas
         function loadGame() {
             const raw = localStorage.getItem('foodClicker_v45_'+currentSlot);
@@ -1893,6 +3170,7 @@
                 calculateCPS(); calculateCPC(); applySkin(); initShop();
                 unsavedChanges = false;
                 updateUnsavedWarning();
+                updateNewsMessage(); // actualizar noticias al cargar
             }
         }
 // Destruye Tu Universo Reseteando!!
@@ -1930,6 +3208,7 @@
                 calculateCPS(); calculateCPC(); applySkin(); initShop();
                 unsavedChanges = true;
                 updateUnsavedWarning();
+                updateNewsMessage(); // reiniciar noticias
             }
         }
 // Exporta Tu save Como JSON Y Se Incluyen La Mayoria De Los Datos, Creo...
@@ -1971,6 +3250,7 @@
                         calculateCPS(); calculateCPC(); applySkin(); initShop();
                         unsavedChanges = false;
                         updateUnsavedWarning();
+                        updateNewsMessage(); // actualizar noticias al importar
                     }
                 } catch (ex) {
                     alert('Error al leer archivo');
@@ -2046,15 +3326,34 @@
         });
 
         setInterval(() => { 
-            if(cps > 0) { 
+            if (!lockCPS && cps > 0) {
                 cookies += (cps/10); 
                 totalEver += (cps/10); 
                 updateUI(); 
             } 
         }, 100);
 
+        // Iniciar autoguardado por defecto
+        startAutosave();
+
+        // Manejar el cambio del interruptor de autoguardado
+        document.getElementById('autosave-toggle').addEventListener('change', function(e) {
+            playSound('buy-sfx'); // Reproducir sonido de compra
+            const statusText = document.getElementById('autosave-status-text');
+            if (e.target.checked) {
+                statusText.innerText = 'ON';
+                startAutosave();
+            } else {
+                statusText.innerText = 'OFF';
+                stopAutosave();
+            }
+        });
+
         schedulePowerup();
-        setInterval(autosave, 360000);
+        
+        // Actualizar noticias cada 5 segundos
+        setInterval(updateNewsMessage, 5000);
+
 // Si Es Android o iOS La IU Cambia
         if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
     // En móviles, inicializar audio con el primer clic en cualquier parte
@@ -2070,7 +3369,8 @@
     audioInitialized = true;
 }
         changeLanguage('es'); // Iniciar En Español Por Defecto
-        calculateCPC(); // inicializar cpc
+        calculateCPC(); // Inicializar cpc
+        updateNewsMessage(); // Mostrar mensaje inicial
     </script>
 </body>
 </html>
