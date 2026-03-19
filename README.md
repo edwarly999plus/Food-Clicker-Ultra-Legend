@@ -14,10 +14,10 @@
 ## 🎮 Características Principales
 
 * **Mecánicas Incrementales:** Mejora la potencia de tus clics y desbloquea edificios para generar producción automática de comida por segundo (CPS).
-* **Escalabilidad masiva:** Soporte de notación abreviada hasta **Vg (Vigintillón)**.
+* **Escalabilidad masiva:** Soporte de notación abreviada hasta **infinity (1e300)**.
 * **Multilingüe:** Traducido a más de 10 idiomas para una experiencia global.
 * **Multiplataforma:** Ejecución nativa en Windows o mediante cualquier navegador moderno (HTML5).
-* **Assets externos:** Integración optimizada con recursos alojados en **Archive.org**.
+* **Assets externos:** Integración ultra optimizada con recursos descargables en caché alojados en **Archive.org**.
 
 ## 🖥️ Capturas de Pantalla
 
