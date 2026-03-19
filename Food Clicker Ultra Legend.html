@@ -2671,6 +2671,9 @@ window.dev = {
         console.log("  dev.audio.loop(id, true/false)      → Activa/desactiva loop en un audio");
         console.log("  dev.audio.loopAll(true/false)       → Activa/desactiva loop en todos los audios");
         console.log("  dev.audio.volume(id, 0-1)           → Ajusta volumen de un audio");
+        console.log("--- Caché offline ---");
+        console.log("  dev.cache.delete()                   → Elimina la caché 'food-clicker-assets'");
+        console.log("  dev.cache.download()                 → Descarga y reemplaza la caché existente (vuelve a cachear todos los assets)");
         console.log("--- Utilidades ---");
         console.log("  dev.reset()                         → Reinicia la partida (mantiene multiplicadores?) No, resetea todo");
         console.log("  dev.unlockAllSkins()                → Desbloquea todas las skins de emoji");
@@ -2869,6 +2872,51 @@ window.dev = {
         }
     },
 
+    // Nuevos comandos de caché
+    cache: {
+        /**
+         * Elimina la caché 'food-clicker-assets'.
+         */
+        delete: async function() {
+            if (!('caches' in window)) {
+                console.warn('Cache API no soportada.');
+                return;
+            }
+            try {
+                await caches.delete(CACHE_NAME);
+                console.log(`Caché "${CACHE_NAME}" eliminada.`);
+            } catch (e) {
+                console.error('Error al eliminar la caché:', e);
+            }
+        },
+        /**
+         * Descarga de nuevo todos los assets y reemplaza la caché existente.
+         * Luego actualiza los elementos multimedia (audio, imagen) con los nuevos blobs.
+         */
+        download: async function() {
+            if (!('caches' in window)) {
+                console.warn('Cache API no soportada.');
+                return;
+            }
+            console.log('Iniciando descarga y reemplazo de caché...');
+            try {
+                // 1. Eliminar caché actual
+                await caches.delete(CACHE_NAME);
+                console.log('Caché eliminada.');
+
+                // 2. Volver a cachear todos los assets (usa las funciones globales existentes)
+                await ensureAssetsCached();
+                console.log('Assets descargados y almacenados en caché.');
+
+                // 3. Reemplazar las fuentes de audio e imagen con los nuevos blobs
+                await replaceSrcWithCache();
+                console.log('Elementos multimedia actualizados con la nueva caché.');
+            } catch (e) {
+                console.error('Error durante la descarga de caché:', e);
+            }
+        }
+    },
+
     reset: function() { restartGame(); },
     unlockAllSkins: function() {
         skinItems.forEach(item => { if (!ownedSkins.includes(item.emoji)) ownedSkins.push(item.emoji); });
@@ -2911,6 +2959,10 @@ spawnPowerup = function() {
         schedulePowerup();
     }, powerupDuration);
 };
+
+// -----------------------------------------------------------------------------------
+// ---------------- FIN DE LA SECCIÓN DE LA CONSOLA DE DESARROYO ---------------------
+// -----------------------------------------------------------------------------------
 
         // Función para actualizar las estadísticas en la sección de estadísticas
         function updateStats() {
@@ -3427,6 +3479,100 @@ spawnPowerup = function() {
         changeLanguage('es'); // Iniciar En Español Por Defecto
         calculateCPC(); // Inicializar cpc
         updateNewsMessage(); // Mostrar mensaje inicial
+
+ // -------------------- OFFLINE CACHE (AUDIOS + IMÁGENES) --------------------
+        const CACHE_NAME = 'food-clicker-assets';
+        const ASSETS_TO_CACHE = [
+            // Audios
+            'https://archive.org/download/foodclicker-archive/assets/mus/bg-music.mp3',
+            'https://archive.org/download/foodclicker-archive/assets/sfx/click.mp3',
+            'https://archive.org/download/foodclicker-archive/assets/sfx/buy.mp3',
+            'https://archive.org/download/foodclicker-archive/assets/sfx/arch.mp3',
+            // Imágenes de iconos sociales
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Octicons-mark-github.svg/960px-Octicons-mark-github.svg.png?_=20180806170715',
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/3840px-YouTube_full-color_icon_%282017%29.svg.png'
+        ];
+
+        async function ensureAssetsCached() {
+            if (!navigator.onLine) {
+                console.log('Sin conexión, se usaran los archivos que ya estan en caché, si no, no se intentara cachear.');
+                return;
+            }
+            try {
+                const cache = await caches.open(CACHE_NAME);
+                const requests = ASSETS_TO_CACHE.map(url => new Request(url));
+                const results = await Promise.allSettled(requests.map(req => cache.match(req)));
+                const toAdd = [];
+                results.forEach((res, i) => {
+                    if (res.status === 'fulfilled' && !res.value) {
+                        toAdd.push(ASSETS_TO_CACHE[i]);
+                    }
+                });
+                if (toAdd.length > 0) {
+                    await Promise.allSettled(toAdd.map(url => cache.add(url).catch(e => console.warn('Fallo al añadir a caché', url, e))));
+                    console.log('Recursos añadidos a caché:', toAdd);
+                } else {
+                    console.log('Todos los recursos ya están en caché.');
+                }
+            } catch (e) {
+                console.warn('Error al abrir la caché', e);
+            }
+        }
+
+        async function replaceSrcWithCache() {
+            const cache = await caches.open(CACHE_NAME);
+            // Reemplazar audios
+            document.querySelectorAll('audio').forEach(async (audio) => {
+                const src = audio.src;
+                if (src.startsWith('blob:')) return;
+                const response = await cache.match(src);
+                if (response) {
+                    try {
+                        const blob = await response.blob();
+                        const wasPlaying = !audio.paused;
+                        const currentTime = audio.currentTime;
+                        const url = URL.createObjectURL(blob);
+                        audio.src = url;
+                        if (wasPlaying) {
+                            audio.currentTime = currentTime;
+                            audio.play().catch(() => {});
+                        }
+                    } catch (e) {
+                        console.warn('Error reemplazando audio', src, e);
+                    }
+                }
+            });
+            // Reemplazar imágenes
+            document.querySelectorAll('img').forEach(async (img) => {
+                const src = img.src;
+                if (src.startsWith('blob:')) return;
+                const response = await cache.match(src);
+                if (response) {
+                    try {
+                        const blob = await response.blob();
+                        const url = URL.createObjectURL(blob);
+                        img.src = url;
+                    } catch (e) {
+                        console.warn('Error reemplazando imagen', src, e);
+                    }
+                }
+            });
+        }
+
+        async function setupOfflineAssets() {
+            await ensureAssetsCached();
+            await replaceSrcWithCache();
+        }
+
+        if ('caches' in window) {
+            if (document.readyState === 'complete') {
+                setupOfflineAssets();
+            } else {
+                window.addEventListener('load', setupOfflineAssets);
+            }
+        } else {
+            console.warn('Cache API no soportada, los recursos no funcionarán sin conexión.');
+        }
     </script>
 </body>
 </html>
