@@ -22,7 +22,13 @@
 ## 🖥️ Capturas de Pantalla
 
 <p align="center">
-  <img width="80%" alt="Preview del juego" src="https://github.com/user-attachments/assets/17aa1f21-1ea5-4abe-a259-918af04e2b4f" />
+  Modo Oscuro
+  <img width="1346" height="690" alt="image" src="https://github.com/user-attachments/assets/9b3366e5-761f-4edd-8495-0c1ad40ab255" />
+
+<p align="center">
+  Modo Claro
+  <img width="1345" height="685" alt="image" src="https://github.com/user-attachments/assets/e1586c46-065b-427e-886a-f166117a06b1" />
+
 </p>
 
 ---
