@@ -2,7 +2,7 @@
 
 <p align="center">
   <a href="https://edwarly999plus.github.io/Food-Clicker-Ultra-Legend/" target="_blank">
-    <img src="https://img.shields.io/badge/PLAY%20NOW!-brightgreen?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Play Button">
+    <strong>🎮 ¡JUGAR AHORA! 🎮</strong>
   </a>
 </p>
 
