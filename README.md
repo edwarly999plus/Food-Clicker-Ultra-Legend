@@ -58,7 +58,7 @@
 3. Ejecuta y ¡empieza a hacer clic!
 
 ### Otras Plataformas (Web/Linux/Mac/Android/iOS)
-Simplemente abre el archivo `Food Clicker Ultra Legend.html` en tu navegador preferido (Chrome, Firefox, Edge, etc.).
+Simplemente abre el archivo `index.html` en tu navegador preferido (Chrome, Firefox, Edge, etc.).
 
 ---
 
