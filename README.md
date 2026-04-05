@@ -64,7 +64,7 @@
 3. Ejecuta y ¡empieza a hacer clic!
 
 ### Otras Plataformas (Web/Linux/Mac/Android/iOS)
-Simplemente abre el archivo `index.html` en tu navegador preferido (Chrome, Firefox, Edge, etc.) o **haz clic en el botón PLAY NOW** de arriba.
+Simplemente abre el archivo `index.html` en tu navegador preferido (Chrome, Firefox, Edge, etc.) o **haz clic en el botón JUGAR AHORA** de arriba.
 
 ---
 
